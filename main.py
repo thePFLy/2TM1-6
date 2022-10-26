@@ -35,23 +35,20 @@ def connection():
         return allUsers[len(allUsers)-1]
     else:
         if intro == 2:
-            print("----connection----")
-            nom = input("Veuillez entrez votre nom : ")
-            password = input("Veuillez entrez votre mot de passe : ")
-            for user in allUsers:
-                if nom == user.name:
-                    if password == user.password:
-                        return user
-                    else:
-                        print("Erreur l'identifiant/motdepasse ne correspond pas")
-            print("Erreur votre nom ne se trouve pas dans la base de données")
-            return False
-
+            while True:
+                print("----connection----")
+                nom = input("Veuillez entrez votre nom : ")
+                password = input("Veuillez entrez votre mot de passe : ")
+                for user in allUsers:
+                    if nom == user.name:
+                        if password == user.password:
+                            return user
+                        else:
+                            print("Erreur l'identifiant/motdepasse ne correspond pas")
+                print("Erreur votre nom ne se trouve pas dans la base de données")
 
 def main():
     user = connection()
-    while user == False:
-        user = connection()
 
     if user.inthekitchen == False:
         print("Bienvenue "+user.fname+" !")
