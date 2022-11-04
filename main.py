@@ -15,6 +15,13 @@ tous se fera par des prompt , mais ça ne sera pas définitif
 en attendant de pouvoir le faire directement par un interface 
 graphique
 """
+def rotation():
+    index = 0
+    for user in allUsers:
+        if user.inthekitchen == True:
+            user.inthekitchen = False
+            allUsers[index+1].inthekitchen = True
+        index = index + 1
 
 def connection():
     print("-Bienvenue sur le gestionnaire de repas-")
@@ -35,26 +42,23 @@ def connection():
         return allUsers[len(allUsers)-1]
     else:
         if intro == 2:
-            print("----connection----")
-            nom = input("Veuillez entrez votre nom : ")
-            password = input("Veuillez entrez votre mot de passe : ")
-            for user in allUsers:
-                if nom == user.name:
-                    if password == user.password:
-                        return user
-                    else:
-                        print("Erreur l'identifiant/motdepasse ne correspond pas")
-            print("Erreur votre nom ne se trouve pas dans la base de données")
-            return False
-
+            while True:
+                print("----connection----")
+                nom = input("Veuillez entrez votre nom : ")
+                password = input("Veuillez entrez votre mot de passe : ")
+                for user in allUsers:
+                    if nom == user.name:
+                        if password == user.password:
+                            return user
+                        else:
+                            print("Erreur l'identifiant/motdepasse ne correspond pas")
+                print("Erreur votre nom ne se trouve pas dans la base de données")
 
 def main():
     user = connection()
-    while user == False:
-        user = connection()
 
     if user.inthekitchen == False:
-        print("Bienvenue "+user.fname+" !")
+        print("Vous n'etes pas encore cuisinier revenez un autre jour")
     else:
         print("Bienvenue chef "+user.fname+" !")
 
