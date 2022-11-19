@@ -114,4 +114,14 @@ def main():
 
 
 if __name__ == '__main__':
+	parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter,
+	description='''
+	MVP Help description
+	----------------------
+	1. Enter your name and first name
+	2. Make a choice between 1,2,3 (1 subscribre, 2 unsubscribe, 3 exit)
+	3. If you take 1 or 2, choose between the meal time (1 breakfast,2 lunch,3 dinner,4 all)
+	3a. You cannot unsucribe a meal time when you are not subscribe
+	''')
+	parser.print_help()
 	main()
