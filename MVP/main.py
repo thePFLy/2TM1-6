@@ -5,9 +5,9 @@ import csv
 
 '''
 but: 
-- s'inscrire/désinscrire à un repas matin-midi-soir 
-- avec nom + prenom + choix de quel repas
-- fichier csv avec les différents repas du jour et qui y participe
+- s'inscrire/désinscrire à un repas matin-midi-soir .
+- avec nom + prenom + choix de quel repas.
+- fichier csv avec les différents repas du jour et qui y participe.
 '''
 
 breakfast_participant = []
