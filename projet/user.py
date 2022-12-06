@@ -12,6 +12,13 @@ class Users:
         self._name = Name
         self._password = Password
 
+    @property
+    def name(self):
+        return self._name
+
+    def changePassword(self, new_password):
+        self._password = new_password
+
 
 
 
