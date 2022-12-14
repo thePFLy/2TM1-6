@@ -1,21 +1,18 @@
-class Bill:
+import csv
 
+class Bill:
     """
     this class reprensent a bill for every members of the co-house
-
     """
 
     def __init__(self, date, status=False):
-
         """
             this functions allows you to create a bill for every member of the co-house
              PRE: date and status
             POST: a bill object created
-
         """
         self.date = date
         self.status = status
-
 
     def displayBill(self, meal):
         """
@@ -27,8 +24,8 @@ class Bill:
         bill_str += "Meal: {}\n".format(meal.getDescription())
         bill_str += "Total price: {}\n".format(meal.getTotalPrice())
         return bill_str
-        
-    def payBill(self,user):
+
+    def payBill(self, user):
         """
             this function permits a user to pay his bill
             PRE: a bill object and a user object
@@ -36,3 +33,35 @@ class Bill:
         """
         self.status = True
         print(f"{user.username} has paid the bill.")
+
+    def addDataBill(self):
+        """
+            this function add a meal in a csv file
+            PRE: a meal object
+            POST: the meal is add in the meal.csv file
+        """
+        with open('bill.csv', 'a') as csvfile:
+            fieldnames = ['Date', 'Status']
+            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+            writer.writerow(
+                {'Description': self._description, 'Date': self.date, 'Type': self.type, 'Cooker': self.cooker})
+
+bill_list = []
+
+def initDataBill():
+    """
+        this function add a meal in a csv file
+        PRE: a csv file
+        POST: a list of meal object in meal_list
+    """
+    with open('bill.csv') as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            bill = Bill(row["Date"], row["Status"])
+            bill_list.append(bill)
+
+
+#test
+initDataBill()
+for i in bill_list:
+    print(i.date+ " " + i.status)
