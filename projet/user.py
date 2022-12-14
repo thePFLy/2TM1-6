@@ -1,73 +1,117 @@
-import bcrypt
+from csv import reader
+import os
+import hashlib
+import hmac
+
+users_list = []
+
+
+def add_user_database(user):
+    """this function allows you to add User (username hashed_password) on database (csv file)
+
+    PRE: receive a User object
+    POST: Check if file is already in database, if not add it
+    """
+    # path of file to write
+    path = "database/users.csv"
+    # text to write in file
+    text = user.__str__()
+
+    with open(path, mode="r") as csvfile:
+        spam_reader = reader(csvfile)
+        for lines in spam_reader:
+            users_list.append(lines)
+
+    # check in the user is already in database
+    def check_in_file(file_username, text_value):
+        with open(file_username, 'r') as read_obj:
+            for line in read_obj:
+                if text_value in line:
+                    return True
+        return False
+
+    if check_in_file(path, user.__str__()):
+        return None
+    # add user and encrypt password on database
+    else:
+        file = open(path, 'a')
+        file.write(text)
+        file.close()
+
+
+def delete_user_database(user):
+    """this function allows you to delete User on database (csv file)
+
+    PRE: receive a User object
+    POST: look for the line of the user and delete it
+    """
+    path = "database/users.csv"
+    lookup = user.__str__()
+    the_line = 0
+    with open(path) as myFile:
+        for num, line in enumerate(myFile, 1):
+            if lookup in line:
+                the_line = num
+
+    with open(path, 'r') as fr:
+        # reading line by line
+        lines = fr.readlines()
+        # pointer for position
+        ptr = 1
+        # opening in writing mode
+        with open(path, 'w') as fw:
+            for line in lines:
+                # remove the line of User object
+                if ptr != the_line:
+                    fw.write(line)
+                ptr += 1
+
+
+def hash_new_password(password: str):
+    salt = os.urandom(16)
+    pw_hash = hashlib.pbkdf2_hmac('sha256', password.encode(), salt, 100000)
+    return salt, pw_hash
+
+
+def is_correct_password(salt: bytes, pw_hash: bytes, password: str):
+    return hmac.compare_digest(
+        pw_hash,
+        hashlib.pbkdf2_hmac('sha256', password.encode(), salt, 100000)
+    )
 
 
 class Users:
     """
-    class users represent a co-house member
+    class users represent a co-house member and his attributes
     """
 
-    def __init__(self, name, password):
-        """ this function allows us to create a user based on his name and his password
-            PRE: receive name and password
+    def __init__(self, username: str, hashed_password: str = None, my_salt: str = None):
+        """ this function allows us to create a user based on his username and his password
+            PRE: receive username and password
             POST: a user object
+            RAISE:
 
         """
-        self.hashed_password = None
-        self._name = name
-        self._password = password
+        self._username = username
+        self._hashed_password = hashed_password
+        self._my_salt = my_salt
 
     @property
-    def name(self):
-        return self._name
+    def username(self):
+        return self._username
 
-    def change_password(self, new_password):
-        self._password = new_password
-        self.hash_password()
+    def change_password(self, new_password, old_password=None):
+        """this function allows you to change the password of a User object
 
-    def hash_password(self):
-        byte_password = self._password.encode('utf8')
-        # Generate Salt (Salt is an additional random string to prevent attack)
-        my_salt = bcrypt.gensalt()
-        # Hash password
-        hashed = bcrypt.hashpw(byte_password, my_salt)
-        self.hashed_password = hashed
-
-    def check_password(self):
-        byte_password = self._password.encode('utf8')
-        # True if pwd correspond to hashed
-        return bcrypt.checkpw(byte_password, self.hashed_password)
-
-    def add_user_database(self):
-        # path of file to write
-        path = "database/users.csv"
-        # text to write in file
-        text = self._name + ' ' + str(self.hashed_password) + 'n'
-        # check in the user is already in database
-
-        def check_in_file(file_name, text_value):
-            with open(file_name, 'r') as read_obj:
-                for line in read_obj:
-                    if text_value in line:
-                        return True
-            return False
-
-        if check_in_file(path, self._name):
-            return None
-        # add user and password on database
+        PRE: receive a new password for the User object
+        POST: change the password and encrypt it
+        """
+        if self._hashed_password is None and self._my_salt is None:
+            self._my_salt, self._hashed_password = hash_new_password(new_password)
+        elif is_correct_password(self._my_salt, self._hashed_password, old_password):
+            self._my_salt, self._hashed_password = hash_new_password(new_password)
         else:
-            file = open(path, 'a')
-            file.write("\n" + text)
-            file.close()
+            print(f'old password incorrect')
 
-    def delete_user_database(self):
-        path = "database/users.csv"
-        with open(path, 'r') as read_obj:
-            for line in read_obj:
-                if self._name in line:
-                    print("present")
-                    return True
-
-test = Users("simon", "test")
-test.add_user_database()
-
-test.delete_user_database()
+    def __str__(self):
+        return f'{self._username},{self._hashed_password}'
