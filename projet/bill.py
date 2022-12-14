@@ -23,13 +23,15 @@ class Bill:
             PRE: a bill object and a meal object
             POST: textual representation of the bill
         """
-
+        print("Bill for meal on {}:".format(self.date))
+        print("Meal: {}".format(meal.getDescription()))
+        print("Total price: {}".format(meal.getTotalPrice()))
+        
     def payBill(self,user):
         """
             this function permits a user to pay his bill
             PRE: a bill object and a user object
             POST: status= True that means bill has been paid
         """
-
-
-    pass
+        self.status = True
+        print(f"{user.username} has paid the bill.")
