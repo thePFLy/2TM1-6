@@ -6,37 +6,32 @@ import hmac
 users_list = []
 
 
+def read_file(path):
+    # add(user(pwd,hash,salt))
+    with open(path, mode="r") as csvfile:
+        spam_reader = reader(csvfile)
+        for lines in spam_reader:
+            # create user object from lines
+            if Users(lines[0], lines[1], lines[2]) not in users_list:
+                users_list.append(Users(lines[0], lines[1], lines[2]))
+
+
 def add_user_database(user):
     """this function allows you to add User (username hashed_password) on database (csv file)
 
     PRE: receive a User object
     POST: Check if file is already in database, if not add it
     """
-    # path of file to write
-    path = "database/users.csv"
-    # text to write in file
-    text = user.__str__()
+    print(user.__str__())
+    flag = False
+    for users in users_list:
+        if users.__str__() == user.__str__():
+            flag = True
+    print(flag)
+    if flag is False:
+        users_list.append(user)
 
-    with open(path, mode="r") as csvfile:
-        spam_reader = reader(csvfile)
-        for lines in spam_reader:
-            users_list.append(lines)
 
-    # check in the user is already in database
-    def check_in_file(file_username, text_value):
-        with open(file_username, 'r') as read_obj:
-            for line in read_obj:
-                if text_value in line:
-                    return True
-        return False
-
-    if check_in_file(path, user.__str__()):
-        return None
-    # add user and encrypt password on database
-    else:
-        file = open(path, 'a')
-        file.write(text)
-        file.close()
 
 
 def delete_user_database(user):
@@ -114,4 +109,9 @@ class Users:
             print(f'old password incorrect')
 
     def __str__(self):
-        return f'{self._username},{self._hashed_password}'
+        return f'{self._username},{self._hashed_password},{self._my_salt}'
+
+
+print(read_file("database/users.csv"))
+print(add_user_database(Users("brice","ok","test")))
+print(users_list)
