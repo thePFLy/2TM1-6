@@ -1,15 +1,17 @@
+import csv
+
 class Meal:
     """ class meal """
 
-    def __init__(self, Description, Date, Type, cooker):
+    def __init__(self, description, date, type, cooker):
         """"
             this function allows you to create a meal object
             PRE: Description , Date , type of cook , cooker who is the responsible of the meal and the list of participants
             POST: create a meal object
         """
-        self._description = Description
-        self.date = Date
-        self.type = Type
+        self._description = description
+        self.date = date
+        self.type = type
         self.participants = []
         self.cooker = cooker
 
@@ -72,3 +74,35 @@ class Meal:
             POST: a textual representation of the cooker
         """
         return f"the cooker is {self.cooker}"
+
+    def addDataMeal(self):
+        """
+            this function add a meal in a csv file
+            PRE: a meal object
+            POST: the meal is add in the meal.csv file
+        """
+        with open('database/meal.csv', 'a') as csvfile:
+            fieldnames = ['Description', 'Date', 'Type', 'Cooker']
+            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+            writer.writerow(
+                {'Description': self._description, 'Date': self.date, 'Type': self.type, 'Cooker': self.cooker})
+
+meal_list = []
+
+def initDataMeal():
+    """
+        this function add a meal in a csv file
+        PRE: a csv file
+        POST: a list of meal object in meal_list
+    """
+    with open('database/meal.csv') as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            meal = Meal(row["Description"], row["Date"], row["Type"], row["Cooker"])
+            meal_list.append(meal)
+
+
+#test
+initDataMeal()
+for i in meal_list:
+    print(i.cooker)
