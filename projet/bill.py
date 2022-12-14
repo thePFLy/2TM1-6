@@ -44,7 +44,7 @@ class Bill:
             fieldnames = ['Date', 'Status']
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             writer.writerow(
-                {'Description': self._description, 'Date': self.date, 'Type': self.type, 'Cooker': self.cooker})
+                {'Date': self.date, 'Status': self.status})
 
 bill_list = []
 
@@ -63,5 +63,7 @@ def initDataBill():
 
 #test
 initDataBill()
+facture = Bill("12-12-2014")
+facture.addDataBill()
 for i in bill_list:
     print(i.date+ " " + i.status)
