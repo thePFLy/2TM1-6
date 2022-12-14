@@ -23,9 +23,10 @@ class Bill:
             PRE: a bill object and a meal object
             POST: textual representation of the bill
         """
-        print("Bill for meal on {}:".format(self.date))
-        print("Meal: {}".format(meal.getDescription()))
-        print("Total price: {}".format(meal.getTotalPrice()))
+        bill_str = "Bill for meal on {}:\n".format(self.date)
+        bill_str += "Meal: {}\n".format(meal.getDescription())
+        bill_str += "Total price: {}\n".format(meal.getTotalPrice())
+        return bill_str
         
     def payBill(self,user):
         """
