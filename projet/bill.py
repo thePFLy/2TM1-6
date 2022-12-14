@@ -52,7 +52,7 @@ def initDataBill():
     """
         this function add a bill in a csv file
         PRE: a csv file
-        POST: a list of bill object in meal_list
+        POST: a list of bill object in bill_list
     """
     with open('bill.csv') as csvfile:
         reader = csv.DictReader(csvfile)
