@@ -1,78 +1,48 @@
-from csv import reader
 import os
 import hashlib
-import hmac
 
-users_list = []
+
+path_database = "database/users.csv"
 
 
 def read_file(path):
-    # add(user(pwd,hash,salt))
+    out = []
     with open(path, mode="r") as csvfile:
-        spam_reader = reader(csvfile)
-        for lines in spam_reader:
-            # create user object from lines
-            if Users(lines[0], lines[1], lines[2]) not in users_list:
-                users_list.append(Users(lines[0], lines[1], lines[2]))
+        for line in csvfile.readlines():
+            tmp_line = line.strip().split(",")
+            out.append(Users(tmp_line[0], tmp_line[1], tmp_line[2]))
+    return out
 
 
-def add_user_database(user):
+def add_user_database(new_user, users_list):
     """this function allows you to add User (username hashed_password) on database (csv file)
 
     PRE: receive a User object
     POST: Check if file is already in database, if not add it
     """
-    print(user.__str__())
-    flag = False
-    for users in users_list:
-        if users.__str__() == user.__str__():
-            flag = True
-    print(flag)
-    if flag is False:
-        users_list.append(user)
+    for user in users_list:
+        if user.username == new_user.username:
+            return
+    users_list.append(new_user)
 
 
-
-
-def delete_user_database(user):
+def delete_user_database(old_user, users_list):
     """this function allows you to delete User on database (csv file)
 
     PRE: receive a User object
     POST: look for the line of the user and delete it
     """
-    path = "database/users.csv"
-    lookup = user.__str__()
-    the_line = 0
-    with open(path) as myFile:
-        for num, line in enumerate(myFile, 1):
-            if lookup in line:
-                the_line = num
-
-    with open(path, 'r') as fr:
-        # reading line by line
-        lines = fr.readlines()
-        # pointer for position
-        ptr = 1
-        # opening in writing mode
-        with open(path, 'w') as fw:
-            for line in lines:
-                # remove the line of User object
-                if ptr != the_line:
-                    fw.write(line)
-                ptr += 1
+    for user in users_list:
+        if user.username == old_user.username:
+            del user
 
 
-def hash_new_password(password: str):
-    salt = os.urandom(16)
-    pw_hash = hashlib.pbkdf2_hmac('sha256', password.encode(), salt, 100000)
-    return salt, pw_hash
-
-
-def is_correct_password(salt: bytes, pw_hash: bytes, password: str):
-    return hmac.compare_digest(
-        pw_hash,
-        hashlib.pbkdf2_hmac('sha256', password.encode(), salt, 100000)
-    )
+def write_file(path, users_list):
+    tmp = ""
+    for user in users_list:
+        tmp += str(user) + "\n"
+    with open(path, mode="w") as csvfile:
+        csvfile.write(tmp)
 
 
 class Users:
@@ -91,9 +61,15 @@ class Users:
         self._hashed_password = hashed_password
         self._my_salt = my_salt
 
+    def __str__(self):
+        return f'{self._username},{self._hashed_password},{self._my_salt}'
+
     @property
     def username(self):
         return self._username
+
+    def is_correct_password(self, password: str):
+        return hashlib.pbkdf2_hmac('sha256', password.encode(), self._my_salt, 100000) == self._hashed_password
 
     def change_password(self, new_password, old_password=None):
         """this function allows you to change the password of a User object
@@ -101,17 +77,15 @@ class Users:
         PRE: receive a new password for the User object
         POST: change the password and encrypt it
         """
-        if self._hashed_password is None and self._my_salt is None:
-            self._my_salt, self._hashed_password = hash_new_password(new_password)
-        elif is_correct_password(self._my_salt, self._hashed_password, old_password):
-            self._my_salt, self._hashed_password = hash_new_password(new_password)
-        else:
-            print(f'old password incorrect')
-
-    def __str__(self):
-        return f'{self._username},{self._hashed_password},{self._my_salt}'
+        if old_password is not None and not self.is_correct_password(old_password):
+            print(f"wrong password")
+            return
+        self._my_salt = os.urandom(16)
+        self._hashed_password = hashlib.pbkdf2_hmac('sha256', new_password.encode(), self._my_salt, 100000)
 
 
-print(read_file("database/users.csv"))
-print(add_user_database(Users("brice","ok","test")))
-print(users_list)
+user_list = read_file(path_database)
+test = Users("rsf")
+test.change_password("test")
+add_user_database(test, user_list)
+write_file(path_database, user_list)
