@@ -37,8 +37,8 @@ class Bill:
     def addDataBill(self):
         """
             this function add a meal in a csv file
-            PRE: a meal object
-            POST: the meal is add in the meal.csv file
+            PRE: a bill object
+            POST: the bill is add in the meal.csv file
         """
         with open('bill.csv', 'a') as csvfile:
             fieldnames = ['Date', 'Status']
@@ -50,9 +50,9 @@ bill_list = []
 
 def initDataBill():
     """
-        this function add a meal in a csv file
+        this function add a bill in a csv file
         PRE: a csv file
-        POST: a list of meal object in meal_list
+        POST: a list of bill object in meal_list
     """
     with open('bill.csv') as csvfile:
         reader = csv.DictReader(csvfile)
