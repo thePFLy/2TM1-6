@@ -36,7 +36,7 @@ class Bill:
 
     def addDataBill(self):
         """
-            this function add a meal in a csv file
+            this function add a bill in a csv file
             PRE: a bill object
             POST: the bill is add in the meal.csv file
         """
