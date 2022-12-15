@@ -1,7 +1,11 @@
+from user import Users
+from Ingredient import Ingredient
+
+
 class Meal:
     """ class meal """
 
-    def __init__(self, Description, Date, Type, cooker):
+    def __init__(self, Description, Date, Type, cooker, listofIngredient):
         """"
             this function allows you to create a meal object
 
@@ -11,9 +15,9 @@ class Meal:
         """
         self._description = Description
         self.date = Date
-        self.type = Type
         self.participants = []
         self.cooker = cooker
+        self.ingredients = listofIngredient
 
     def getDescription(self):
         """
@@ -24,36 +28,43 @@ class Meal:
         """
         return self._description
 
-    def getTotalPrice(self,listofIngredients):
+    def getTotalPrice(self):
         """
             this function allows you to calculate the amount of a meal based of differents ingredients used
 
              PRE: a meal object and a list of ingredient objects
              POST: a textual representation of the amount of the meal
         """
+        totalPrice = 0
+        for i in self.ingredients:
+            totalPrice = totalPrice + i.priceIngredient()
+
+        return totalPrice
 
     def subscribe(self, user):
         """
-        this function allows a user to take part of a meal
-        PRE: a meal object and a user object
-        POST: a new list of participants
+            this function allows a user to take part of a meal
+             PRE: a meal object and a user object
+             POST: a new list of participants
         """
+        self.participants.append(user)
 
-    def unsubscribe(self,user):
+    def unsubscribe(self, user):
         """
             this function allows a user to retire himself for a meal
             PRE: a meal object and a user object
             POST: a new list of participants
         """
+        self.participants.remove(user)
 
-
-    def changeCooker(self,user):
+    def changeCooker(self, NewCooker):
         """
         this function allows you to change the meal's cooker
         PRE: a meal object and a user object
         POST: a new value for cooker attribut
 
         """
+        self.cooker = NewCooker.name
 
     def getParticipants(self):
         """
@@ -62,6 +73,8 @@ class Meal:
             POST: a textual representation of participants
 
         """
+        for i in self.participants:
+            print(i.name)
 
     def getCooker(self):
         """
@@ -70,7 +83,6 @@ class Meal:
             POST: a textual representation of the cooker
 
         """
-
-
+        print(self.cooker.name)
 
     pass
