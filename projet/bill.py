@@ -8,7 +8,7 @@ class Bill:
     def __init__(self, date, status=False):
         """
             this functions allows you to create a bill for every member of the co-house
-             PRE: date and status
+             PRE: an str date and status
             POST: a bill object created
         """
         self.date = date
@@ -29,7 +29,7 @@ class Bill:
         """
             this function permits a user to pay his bill
             PRE: a bill object and a user object
-            POST: status= True that means bill has been paid
+            POST: status = True that means bill has been paid
         """
         self.status = True
         print(f"{user.username} has paid the bill.")
@@ -38,7 +38,7 @@ class Bill:
         """
             this function add a bill in a csv file
             PRE: a bill object
-            POST: the bill is add in the meal.csv file
+            POST: the bill is add in the bill.csv file
         """
         with open('bill.csv', 'a') as csvfile:
             fieldnames = ['Date', 'Status']
