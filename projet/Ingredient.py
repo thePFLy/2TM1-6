@@ -6,7 +6,7 @@ class Ingredient:
     def __init__(self, name , quantity, price):
         """
         this function allows you to create an ingredient object
-        PRE: name, quantity and price
+        PRE: a str name, an int quantity and price
         POST: an ingredient object created
 
         """
