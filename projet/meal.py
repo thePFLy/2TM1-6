@@ -6,7 +6,7 @@ class Meal:
     def __init__(self, description, date, type, cooker):
         """"
             this function allows you to create a meal object
-            PRE: Description , Date , type of cook , cooker who is the responsible of the meal and the list of participants
+            PRE: an str Description , Date , type of cook , cooker who is the responsible of the meal and the list of participants
             POST: create a meal object
         """
         self._description = description
@@ -38,7 +38,7 @@ class Meal:
         """
         this function allows a user to take part of a meal
         PRE: a meal object and a user object
-        POST: a new list of participants
+        POST: add a new person in the list of participants
         """
         self.participants.append(user.username)
 
@@ -46,7 +46,7 @@ class Meal:
         """
             this function allows a user to retire himself for a meal
             PRE: a meal object and a user object
-            POST: a new list of participants
+            POST: remove a person from list of participants
         """
         self.participants.remove(user.username)
 
@@ -55,7 +55,7 @@ class Meal:
         """
         this function allows you to change the meal's cooker
         PRE: a meal object and a user object
-        POST: a new value for cooker attribut
+        POST: change the cooker name in cooker attribut of meal object
         """
         self.cooker = user
 
