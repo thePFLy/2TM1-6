@@ -8,7 +8,7 @@ class Bill:
     def __init__(self, date, status=False):
         """
             this functions allows you to create a bill for every member of the co-house
-             PRE: an str date and status
+             PRE: a str date and a boolean status
             POST: a bill object created
         """
         self.date = date
