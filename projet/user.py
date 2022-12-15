@@ -9,7 +9,7 @@ def read_file(path: str):
     """this function allows you to read a file and append each line as user
     PRE:
     :path, a path already created (string)
-    POST: returns a list that contains the user objects from the lines of the file as parameter
+    POST: returns a list that contains the User objects from the lines of the file as parameter
     """
     out = []
     with open(path, mode="r") as csvfile:
@@ -24,8 +24,8 @@ def add_user_database(new_user, users_list):
 
     PRE:
     :new_user, a User object
-    :users_list, a list of users empty or not
-    POST: append the user object to the list if the name of the object is not already in this list
+    :users_list, a list of Users empty or not
+    POST: append the User object to the list if the name of the object is not already in this list
     """
     for user in users_list:
         if user.username == new_user.username:
@@ -50,8 +50,8 @@ def write_file(path, users_list):
     """this function allows you to write objects (username hashed_password, my_salt) from list to file
     PRE:
     :path, a path already created of file
-    :users_list, user list empty or not
-    POST: write from a list the users object (username hashed_password, my_salt) for each lines of the file
+    :users_list, User list empty or not
+    POST: write from a list the Users object (username hashed_password, my_salt) for each lines of the file
     """
     tmp = ""
     for user in users_list:
@@ -71,7 +71,7 @@ class Users:
         :username, username (string)
         :hashed_password, a hashed password (bytes set to None by default)
         :my_salt, a salt (bytes)
-        POST: a user object created
+        POST: a User object created
         """
         self._username = username
         self._hashed_password = hashed_password
