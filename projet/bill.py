@@ -34,23 +34,23 @@ class Bill:
         self.status = True
         print(f"{user.username} has paid the bill.")
 
-    def addDataBill(self):
-        """
-            this function add a bill in a csv file
-            PRE: a bill object
-            POST: the bill is add in the bill.csv file
-        """
-        with open('bill.csv', 'a') as csvfile:
-            fieldnames = ['Date', 'Status']
-            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-            writer.writerow(
-                {'Date': self.date, 'Status': self.status})
-
-bill_list = []
-
-def initDataBill():
+def addDataBill(bill):
     """
         this function add a bill in a csv file
+        PRE: a bill object
+        POST: the bill is add in the bill.csv file
+    """
+    with open('bill.csv', 'a') as csvfile:
+        fieldnames = ['Date', 'Status']
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writerow(
+            {'Date': bill.date, 'Status': bill.status})
+
+
+def initDataBill():
+    list = []
+    """
+        initialise bill_list with the contents of the csv file bill.csv
         PRE: a csv file
         POST: a list of bill object in bill_list
     """
@@ -58,12 +58,13 @@ def initDataBill():
         reader = csv.DictReader(csvfile)
         for row in reader:
             bill = Bill(row["Date"], row["Status"])
-            bill_list.append(bill)
+            list.append(bill)
+    return list
 
-
+bill_list = initDataBill()
+            
 #test
-initDataBill()
 facture = Bill("12-12-2014")
-facture.addDataBill()
+addDataBill(facture)
 for i in bill_list:
     print(i.date+ " " + i.status)
