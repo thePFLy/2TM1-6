@@ -31,7 +31,7 @@ def changement_planning(lundi,mardi,mercredi,jeudi,vendredi,samedi,dimanche):
                          'samedi': samedi, 'dimanche': dimanche})
 
 
-def planning():
+def planning(etudiants):
     today = datetime.today()
     ecart = today - jourJ
     if ecart.days >= 7:
@@ -104,11 +104,11 @@ def planning():
             dimanche = etudiants_choisis[6]
         changement_planning(lundi,mardi,mercredi,jeudi,vendredi,samedi,dimanche)
     else:
-        print("cbon")
         pass
 
-
-etudiants = ["Etudiant 1", "Etudiant 2", "Etudiant 3", "Etudiant 4", "Etudiant 5"]
 jourJ = datetime.strptime(jourJ(), "%d-%m-%Y")
 
-planning()
+#test
+etudiants = ["Etudiant 1", "Etudiant 2", "Etudiant 3", "Etudiant 4", "Etudiant 5"]
+planning(etudiants)
+
