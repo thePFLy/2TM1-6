@@ -74,3 +74,39 @@ class Meal:
             POST: a textual representation of the cooker
         """
         return f"the cooker is {self.cooker}"
+
+def addDataMeal(meal):
+    """
+        this function add a meal in a csv file
+        PRE: a meal object
+        POST: the meal is add in the meal.csv file
+    """
+    with open('meal.csv', 'a') as csvfile:
+        fieldnames = ['Description', 'Date', 'Type', 'Participants', 'Cooker']
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writerow(
+            {'Description': meal._description, 'Date': meal.date, 'Type': meal.type, 'Participants': meal.participants, 'Cooker': meal.cooker})
+
+def initDataMeal():
+    meal_list = []
+    """
+        initialise meal_list with the contents of the csv file meal.csv
+        PRE: a csv file
+        POST: a list of meal object in meal_list
+    """
+    with open('meal.csv') as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            meal = Meal(row["Description"], row["Date"], row["Type"], row["Cooker"])
+            meal.participants = row["Participants"]
+            meal_list.append(meal)
+    return meal_list
+
+meal_list = initDataMeal()
+
+#test
+facture = Meal("sandiwch","12-12-2014","Lunch","Markus")
+addDataMeal(facture)
+for i in meal_list:
+    print(i.date+ " "+i._description)
+
