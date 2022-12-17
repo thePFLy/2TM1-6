@@ -1,8 +1,5 @@
-import os
-import hashlib
-
-
-path_database = "database/users.csv"
+from os import urandom
+from hashlib import pbkdf2_hmac
 
 
 def read_file(path: str):
@@ -65,7 +62,7 @@ class Users:
     class users represent a co-house member and his attributes
     """
 
-    def __init__(self, username: str, hashed_password: str = None, my_salt: str = None):
+    def __init__(self, username: str, hashed_password=None, my_salt=None):
         """ this function allows us to create a user based on his username and his password
         PRE:
         :username, username (string)
@@ -90,7 +87,7 @@ class Users:
         :password, password (string len > 0)
         POST: return True if the password correspond to the hashed password of user object and False if not
         """
-        return hashlib.pbkdf2_hmac('sha256', password.encode(), self._my_salt, 100000) == self._hashed_password
+        return pbkdf2_hmac('sha256', password.encode(), self._my_salt, 100000) == self._hashed_password
 
     def change_password(self, new_password: str, old_password: str = None):
         """this function allows you to change the password of a User object
@@ -103,5 +100,5 @@ class Users:
         if old_password is not None and not self.is_correct_password(old_password):
             print(f"wrong password")
             return
-        self._my_salt = os.urandom(16)
-        self._hashed_password = hashlib.pbkdf2_hmac('sha256', new_password.encode(), self._my_salt, 100000)
+        self._my_salt = urandom(16)
+        self._hashed_password = pbkdf2_hmac('sha256', new_password.encode(), self._my_salt, 100000)
