@@ -17,13 +17,17 @@ def connection():
     print("------ login-----")
     user_connexion = input("Type your username\n")
     user_connexion_pwd = getpass("Type your password\n")
-    for user in user_list:
-        if user.username == user_connexion and user.is_correct_password(user_connexion_pwd):
-            print("connected")
-            user_connected(user.username)
-        else:
-            print("invalid pwd or user")
-            introduction()
+    if len(user_list) > 0:
+        for user in user_list:
+            if user.username == user_connexion and user.is_correct_password(user_connexion_pwd):
+                print("connected")
+                user_connected(user.username)
+            else:
+                print("invalid pwd or user")
+                introduction()
+    else:
+        print("you don't have an account yet please register")
+        introduction()
 
 
 def registration():
@@ -53,8 +57,12 @@ def delete_user():
     """
     user_to_delete = str(input("Type the username of the account you want to delete\n"))
     user_to_delete_pwd = str(input("Are you sure to delete your account ? Type your password to delete it\n"))
-    if user_class.Users(user_to_delete).is_correct_password(user_to_delete_pwd):
-        user_class.delete_user_database(user_class.Users(user_to_delete), user_list)
+    for user in user_list:
+        if user.username == user_to_delete and user.is_correct_password(user_to_delete_pwd):
+            user_class.delete_user_database(user_class.Users(user_to_delete), user_list)
+            user_class.write_file(path_database, user_list)
+            print("your account has been deleted")
+            introduction()
     else:
         print("wrong password")
         introduction()
