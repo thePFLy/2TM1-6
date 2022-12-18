@@ -41,7 +41,7 @@ def addDataBill(bill):
         POST: the bill is add in the bill.csv file
     """
     try:
-        with open('bill.csv', 'a') as csvfile:
+        with open('database/bill.csv', 'a') as csvfile:
             fieldnames = ['Date', 'Status']
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             writer.writerow(
@@ -60,7 +60,7 @@ def initDataBill():
         POST: a list of bill object in bill_list
     """
     try:
-        with open('bill.csv') as csvfile:
+        with open('database/bill.csv') as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
                 bill = Bill(row["Date"], row["Status"])
