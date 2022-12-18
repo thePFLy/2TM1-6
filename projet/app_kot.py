@@ -12,9 +12,9 @@ def user_connected():
     print("-----Welcome on dining kot manager-----")
     choice_task = int(input(
         "Type:\n  1 see the schedule.\n  2 register for the meal of the day.\n  3 unsubscribe to meal of the day.\n 4 see invoice.\n 5 change password.\n 6 Sign out.\n 7 Sign out.\n"))
-    while choice_task != 1 and choice_task != 2 and choice_task != 3:
+    while choice_task < 1 and choice_task > 8:
         choice_task = int(input(
-            "Type:\n  1 log in.\n  2 register.\n  3 exit the program\n"))
+             "Type:\n  1 see the schedule.\n  2 register for the meal of the day.\n  3 unsubscribe to meal of the day.\n 4 see invoice.\n 5 change password.\n 6 Sign out.\n 7 Sign out.\n"))
     if choice_task == 1:
         connection()
     elif choice_task == 2:
@@ -22,7 +22,13 @@ def user_connected():
     elif choice_task == 3:
         delete_user()
     elif choice_task == 4:
-        exit()
+        delete_user()
+    elif choice_task == 5:
+        delete_user()
+    elif choice_task == 6:
+        delete_user()
+    elif choice_task == 7:
+        delete_user()
 
 
 def connection():
