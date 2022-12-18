@@ -102,12 +102,16 @@ def user_connected(username):
              "Type:\n  1 see the schedule.\n  2 register for the meal of the day.\n  3 unsubscribe to meal of the day."
              "\n 4 see invoice.\n 5 change password.\n 6 Sign out.\n"))
     if choice_task == 1:
+        # see the schedule of cooker
         pass
     elif choice_task == 2:
+        # register for the meal of the day
         pass
     elif choice_task == 3:
+        # unsubscribe to meal of the day
         pass
     elif choice_task == 4:
+        # See invoice
         pass
     elif choice_task == 5:
         # change the user's password if he confirms with his old password
@@ -121,6 +125,8 @@ def user_connected(username):
         if confirm == "yes":
             user_list[index_user].change_password(user_new_pwd, user_old_pwd)
             user_class.write_file(path_database, user_list)
+            print("The password has been changed")
+            user_connected(username)
         else:
             user_connected(username)
     elif choice_task == 6:
