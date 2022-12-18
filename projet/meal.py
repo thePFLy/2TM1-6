@@ -83,7 +83,7 @@ def addDataMeal(meal):
         POST: the meal is add in the meal.csv file
     """
     try:
-        with open('meal.csv', 'a') as csvfile:
+        with open('database/meal.csv', 'a') as csvfile:
             fieldnames = ['Description', 'Date', 'Type', 'Participants', 'Cooker']
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             writer.writerow(
@@ -101,7 +101,7 @@ def initDataMeal():
         POST: a list of meal object in meal_list
     """
     try:
-        with open('meal.csv') as csvfile:
+        with open('database/meal.csv') as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
                 meal = Meal(row["Description"], row["Date"], row["Type"], row["Cooker"])
