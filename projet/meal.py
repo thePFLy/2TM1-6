@@ -1,4 +1,5 @@
 import csv
+import logging
 
 class Meal:
     """ class meal """
@@ -81,11 +82,16 @@ def addDataMeal(meal):
         PRE: a meal object
         POST: the meal is add in the meal.csv file
     """
-    with open('meal.csv', 'a') as csvfile:
-        fieldnames = ['Description', 'Date', 'Type', 'Participants', 'Cooker']
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-        writer.writerow(
-            {'Description': meal._description, 'Date': meal.date, 'Type': meal.type, 'Participants': meal.participants, 'Cooker': meal.cooker})
+    try:
+        with open('meal.csv', 'a') as csvfile:
+            fieldnames = ['Description', 'Date', 'Type', 'Participants', 'Cooker']
+            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+            writer.writerow(
+                {'Description': meal._description, 'Date': meal.date, 'Type': meal.type,
+                 'Participants': meal.participants, 'Cooker': meal.cooker})
+    except OSError as e:
+            print(type(e), e)
+
 
 def initDataMeal():
     meal_list = []
@@ -94,13 +100,20 @@ def initDataMeal():
         PRE: a csv file
         POST: a list of meal object in meal_list
     """
-    with open('meal.csv') as csvfile:
-        reader = csv.DictReader(csvfile)
-        for row in reader:
-            meal = Meal(row["Description"], row["Date"], row["Type"], row["Cooker"])
-            meal.participants = row["Participants"]
-            meal_list.append(meal)
-    return meal_list
+    try:
+        with open('meal.csv') as csvfile:
+            reader = csv.DictReader(csvfile)
+            for row in reader:
+                meal = Meal(row["Description"], row["Date"], row["Type"], row["Cooker"])
+                meal.participants = row["Participants"]
+                meal_list.append(meal)
+        return meal_list
+    except IOError:
+        logging.exception('')
+    except FileNotFoundError:
+        print('file not found')
+
+
 
 meal_list = initDataMeal()
 

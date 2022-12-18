@@ -40,11 +40,16 @@ def addDataBill(bill):
         PRE: a bill object
         POST: the bill is add in the bill.csv file
     """
-    with open('bill.csv', 'a') as csvfile:
-        fieldnames = ['Date', 'Status']
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-        writer.writerow(
-            {'Date': bill.date, 'Status': bill.status})
+    try:
+        with open('bill.csv', 'a') as csvfile:
+            fieldnames = ['Date', 'Status']
+            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+            writer.writerow(
+                {'Date': bill.date, 'Status': bill.status})
+    except IOError:
+        print('error system')
+
+
 
 
 def initDataBill():
@@ -54,12 +59,17 @@ def initDataBill():
         PRE: a csv file
         POST: a list of bill object in bill_list
     """
-    with open('bill.csv') as csvfile:
-        reader = csv.DictReader(csvfile)
-        for row in reader:
-            bill = Bill(row["Date"], row["Status"])
-            list.append(bill)
-    return list
+    try:
+        with open('bill.csv') as csvfile:
+            reader = csv.DictReader(csvfile)
+            for row in reader:
+                bill = Bill(row["Date"], row["Status"])
+                list.append(bill)
+        return list
+    except FileNotFoundError:
+        print('file not found')
+
+
 
 bill_list = initDataBill()
             

@@ -1,34 +1,58 @@
 import random
 import csv
 from datetime import datetime, date, timedelta
+import logging
 
 
 def jourJ():
-    with open('jourJ.csv') as csvfile:
-        reader = csv.DictReader(csvfile)
-        for row in reader:
-            return row["Date"]
+    try:
+        with open('jourJ.csv') as csvfile:
+            reader = csv.DictReader(csvfile)
+            for row in reader:
+                return row["Date"]
+    except IOError:
+        logging.exception('')
+    if not reader:
+        raise ValueError('No data available')
+
+
+
+
+
 
 
 def newJourJ():
     newdate = datetime.today()
     formatted_date = newdate.strftime('%d-%m-%Y')
-    with open('jourJ.csv', 'w') as csvfile:
-        fieldnames = ['Date']
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-        writer.writerow({'Date': "Date"})
-        writer.writerow({'Date': formatted_date})
+    try:
+        with open('jourJ.csv', 'w') as csvfile:
+            fieldnames = ['Date']
+            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+            writer.writerow({'Date': "Date"})
+            writer.writerow({'Date': formatted_date})
+    except OSError as e:
+            print(type(e), e)
 
 
-def changement_planning(lundi,mardi,mercredi,jeudi,vendredi,samedi,dimanche):
-    with open('planning.csv', 'w') as csvfile:
-        fieldnames = ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche']
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-        writer.writerow(
-            {'lundi': 'lundi', 'mardi': 'mardi', 'mercredi': 'mercredi', 'jeudi': 'jeudi', 'vendredi': 'vendredi',
-             'samedi': 'samedi', 'dimanche': 'dimanche'})
-        writer.writerow({'lundi': lundi, 'mardi': mardi, 'mercredi': mercredi, 'jeudi': jeudi, 'vendredi': vendredi,
-                         'samedi': samedi, 'dimanche': dimanche})
+
+
+
+def changement_planning(lundi, mardi, mercredi, jeudi, vendredi, samedi, dimanche):
+
+    try:
+        with open('planning.csv', 'w') as csvfile:
+            fieldnames = ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche']
+            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+            writer.writerow(
+                {'lundi': 'lundi', 'mardi': 'mardi', 'mercredi': 'mercredi', 'jeudi': 'jeudi', 'vendredi': 'vendredi',
+                 'samedi': 'samedi', 'dimanche': 'dimanche'})
+            writer.writerow({'lundi': lundi, 'mardi': mardi, 'mercredi': mercredi, 'jeudi': jeudi, 'vendredi': vendredi,
+                             'samedi': samedi, 'dimanche': dimanche})
+    except OSError as e:
+            print(type(e), e)
+
+
+
 
 
 def planning(etudiants):
@@ -102,13 +126,13 @@ def planning(etudiants):
             vendredi = etudiants_choisis[4]
             samedi = etudiants_choisis[5]
             dimanche = etudiants_choisis[6]
-        changement_planning(lundi,mardi,mercredi,jeudi,vendredi,samedi,dimanche)
+        changement_planning(lundi, mardi, mercredi, jeudi, vendredi, samedi, dimanche)
     else:
         pass
 
+
 jourJ = datetime.strptime(jourJ(), "%d-%m-%Y")
 
-#test
+# test
 etudiants = ["Etudiant 1", "Etudiant 2", "Etudiant 3", "Etudiant 4", "Etudiant 5"]
 planning(etudiants)
-
