@@ -12,7 +12,7 @@ def read_file(path: str):
     with open(path, mode="r") as csvfile:
         for line in csvfile.readlines():
             tmp_line = line.strip().split(",")
-            out.append(Users(tmp_line[0], tmp_line[1], tmp_line[2]))
+            out.append(Users(tmp_line[0], tmp_line[1], tmp_line[2], tmp_line[3]))
     return out
 
 
@@ -62,7 +62,7 @@ class Users:
     class users represent a co-house member and his attributes
     """
 
-    def __init__(self, username: str, hashed_password=None, my_salt=None):
+    def __init__(self, username: str, hashed_password=None, my_salt=None, cooker=False):
         """ this function allows us to create a user based on his username and his password
         PRE:
         :username, username (string)
@@ -73,13 +73,22 @@ class Users:
         self._username = username
         self._hashed_password = hashed_password
         self._my_salt = my_salt
+        self._cooker = cooker
 
     def __str__(self):
-        return f'{self._username},{self._hashed_password},{self._my_salt}'
+        return f'{self._username},{self._hashed_password},{self._my_salt},{self._cooker}'
 
     @property
     def username(self):
         return self._username
+
+    @property
+    def cooker(self):
+        return self._cooker
+
+    @property
+    def change_cooker(self):
+        self._cooker = not self._cooker
 
     def is_correct_password(self, password: str):
         """ this function allows you to verify a password (str) correspond to the hashed password of user object
@@ -102,4 +111,3 @@ class Users:
             return
         self._my_salt = str(urandom(16))
         self._hashed_password = pbkdf2_hmac('sha256', new_password.encode(), self._my_salt.encode(), 100000)
-

@@ -1,5 +1,6 @@
 from getpass import getpass
 import user as user_class
+
 # import meal
 # import Ingredient
 # import bill
@@ -19,9 +20,13 @@ def connection():
     user_connexion_pwd = getpass("Type your password\n")
     if len(user_list) > 0:
         for user in user_list:
-            if user.username == user_connexion and user.is_correct_password(user_connexion_pwd):
-                print("connected")
+            if user.username == user_connexion and user.is_correct_password(user_connexion_pwd) and user.cooker is False:
+                print("user connected")
                 user_connected(user.username)
+            elif user.username == user_connexion and user.is_correct_password(user_connexion_pwd) \
+                    and user.cooker:
+                print("cooker connected")
+                cooker_connected(user.username)
             else:
                 print("invalid pwd or user")
                 introduction()
@@ -108,8 +113,8 @@ def user_connected(username):
         "\n 4 see invoice.\n 5 change password.\n 6 Sign out.\n"))
     while 1 > choice_task > 8:
         choice_task = int(input(
-             "Type:\n  1 see the schedule.\n  2 register for the meal of the day.\n  3 unsubscribe to meal of the day."
-             "\n 4 see invoice.\n 5 change password.\n 6 Sign out.\n"))
+            "Type:\n  1 see the schedule.\n  2 register for the meal of the day.\n  3 unsubscribe to meal of the day."
+            "\n 4 see invoice.\n 5 change password.\n 6 Sign out.\n"))
     if choice_task == 1:
         # see the schedule of cooker
         pass
@@ -140,6 +145,56 @@ def user_connected(username):
             user_connected(username)
     elif choice_task == 6:
         # relaunches the introduction function
+        introduction()
+
+
+def cooker_connected(username):
+    """allows the cooker when he is connected to interact with the program: see the calendar, register or
+    unsubscribe for the meal of the day, see your bill, change your password or disconnect
+    PRE: the user has been connected using the connection() function
+    :username, the username of the logged-in cooker (string)
+    POST: the cooker can interact with the program
+    """
+    # get index of User object in list to work on it
+    index_user = 0
+    for user in user_list:
+        if username == user.username:
+            index_user = user_list.index(user)
+    print("-----Welcome on dining kot manager-----")
+    choice_task = int(input(
+        "Type:\n  1 see the schedule.\n 2 Define the meal of the day (price and description).\n "
+        "3 see invoice.\n 4 change password.\n 5 Sign out.\n"))
+    while 1 > choice_task > 8:
+        choice_task = int(input(
+            "Type:\n  1 see the schedule.\n 2 Define the meal of the day (price and description).\n "
+            "3 see invoice.\n 4 change password.\n 5 Sign out.\n"))
+    if choice_task == 1:
+        # see the schedule of cooker
+        pass
+    elif choice_task == 2:
+        #  Define the meal of the day
+        pass
+    elif choice_task == 3:
+        # see invoice
+        pass
+    elif choice_task == 4:
+        # change password
+        user_old_pwd = str(input("Type the old password\n"))
+        if user_list[index_user].is_correct_password(user_old_pwd):
+            pass
+        else:
+            print(f"invalid pwd for {user_list[index_user].username}")
+        user_new_pwd = str(input("Type the new password \n"))
+        confirm = str(input("Type yes to confirm or something else to quit\n"))
+        if confirm == "yes":
+            user_list[index_user].change_password(user_new_pwd, user_old_pwd)
+            user_class.write_file(path_database, user_list)
+            print("The password has been changed")
+            user_connected(username)
+        else:
+            user_connected(username)
+    elif choice_task == 5:
+        # Sign out
         introduction()
 
 
