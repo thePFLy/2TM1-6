@@ -87,8 +87,10 @@ class Users:
         :password, password (string len > 0)
         POST: return True if the password correspond to the hashed password of user object and False if not
         """
-        print(pbkdf2_hmac('sha256', password.encode(), self._my_salt.encode(), 100000))
+        print(str(pbkdf2_hmac('sha256', password.encode(), self._my_salt.encode(), 100000)))
+        print(type(str(pbkdf2_hmac('sha256', password.encode(), self._my_salt.encode(), 100000))))
         print(self._hashed_password)
+        print(type(self._hashed_password))
         return str(pbkdf2_hmac('sha256', password.encode(), self._my_salt.encode(), 100000)) == self._hashed_password
 
     def change_password(self, new_password: str, old_password: str = None):

@@ -40,6 +40,7 @@ def registration():
         tmp_user_registration.change_password(user_registration_pwd)
         user_class.add_user_database(tmp_user_registration, user_list)
         user_class.write_file(path_database, user_list)
+        introduction()
     else:
         print("you did not enter the same password")
         introduction()
