@@ -3,10 +3,10 @@ class Ingredient:
     class Ingredient represents of ingredients used for a meal
     """
 
-    def __init__(self, name, quantity, price):
+    def __init__(self, name , quantity, price):
         """
         this function allows you to create an ingredient object
-        PRE: name, quantity and price
+        PRE: a str name, an int quantity and a float price
         POST: an ingredient object created
 
         """
@@ -14,9 +14,5 @@ class Ingredient:
         self.name = name
         self.quantity = quantity
         self.price = price
-
-    def priceIngredient(self):
-        return self.quantity * self.price
-
 
     pass
