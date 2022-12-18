@@ -20,7 +20,8 @@ def connection():
     user_connexion_pwd = getpass("Type your password\n")
     if len(user_list) > 0:
         for user in user_list:
-            if user.username == user_connexion and user.is_correct_password(user_connexion_pwd) and user.cooker is False:
+            if user.username == user_connexion and user.is_correct_password(user_connexion_pwd) and user.cooker \
+                    is False:
                 print("user connected")
                 user_connected(user.username)
             elif user.username == user_connexion and user.is_correct_password(user_connexion_pwd) \
