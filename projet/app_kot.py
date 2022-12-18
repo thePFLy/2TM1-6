@@ -7,10 +7,13 @@ import user as user_class
 
 path_database = "database/users.csv"
 user_list = user_class.read_file(path_database)
-user_online = ""
 
 
 def connection():
+    """This function allows the user to connect of his page
+    PRE: the introduction() function was started before
+    POST: connect user on page  user_connected(username) or restart the introduction()
+    """
     print("------ login-----")
     user_connexion = str(input("Type your username\n"))
     user_connexion_pwd = str(getpass("Type your password\n"))
@@ -24,6 +27,10 @@ def connection():
 
 
 def registration():
+    """This function allows to register a user on database
+    PRE: the introduction() function was started before
+    POST: create user on database or restart the introduction()
+    """
     print("------registration-----")
     user_registration = str(input("Type a username\n"))
     user_registration_pwd = str(getpass("Type a password\n"))
@@ -39,13 +46,24 @@ def registration():
 
 
 def delete_user():
+    """This function allows to delete a user on database
+    PRE: the introduction() function was started before
+    POST: delete user on database or restart the introduction()
+    """
     user_to_delete = str(input("Type the username of the account you want to delete\n"))
     user_to_delete_pwd = str(input("Are you sure to delete your account ? Type your password to delete it\n"))
     if user_class.Users(user_to_delete).is_correct_password(user_to_delete_pwd):
         user_class.delete_user_database(user_class.Users(user_to_delete), user_list)
+    else:
+        print("wrong password")
+        introduction()
 
 
 def introduction():
+    """This function is the introduction at the launch of the program
+    PRE: The user launched the program
+    POST: initiate login, registration, delete a user or exit program
+    """
     print("-----Welcome on user connexion-----")
     introduction_connexion = int(input(
         "Type:\n  1 log in.\n  2 register.\n  3 delete account.\n 4 exit the program.\n"))
@@ -64,11 +82,17 @@ def introduction():
 
 
 def user_connected(username):
+    """allows the user when he is connected to interact with the program: see the calendar, register or
+    unsubscribe for the meal of the day, see your bill, change your password or disconnect
+    PRE: the user has been connected using the connection() function
+    :username, the username of the logged-in user (string)
+    POST: the user can interact with the program
+    """
+    # get index of User object in list to work on it
     index_user = 0
     for user in user_list:
         if username == user.username:
             index_user = user_list.index(user)
-    print(user_list[index_user].username)
     print("-----Welcome on dining kot manager-----")
     choice_task = int(input(
         "Type:\n  1 see the schedule.\n  2 register for the meal of the day.\n  3 unsubscribe to meal of the day."
@@ -86,6 +110,7 @@ def user_connected(username):
     elif choice_task == 4:
         pass
     elif choice_task == 5:
+        # change the user's password if he confirms with his old password
         user_old_pwd = str(input("Type the old password\n"))
         if user_list[index_user].is_correct_password(user_old_pwd):
             pass
@@ -99,6 +124,7 @@ def user_connected(username):
         else:
             user_connected(username)
     elif choice_task == 6:
+        # relaunches the introduction function
         introduction()
 
 
