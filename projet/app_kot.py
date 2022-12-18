@@ -15,8 +15,8 @@ def connection():
     POST: connect user on page  user_connected(username) or restart the introduction()
     """
     print("------ login-----")
-    user_connexion = str(input("Type your username\n"))
-    user_connexion_pwd = str(getpass("Type your password\n"))
+    user_connexion = input("Type your username\n")
+    user_connexion_pwd = getpass("Type your password\n")
     for user in user_list:
         if user.username == user_connexion and user.is_correct_password(user_connexion_pwd):
             print("connected")
@@ -33,8 +33,8 @@ def registration():
     """
     print("------registration-----")
     user_registration = str(input("Type a username\n"))
-    user_registration_pwd = str(getpass("Type a password\n"))
-    user_registration_pwd_confirmation = str(getpass("Retype the password to confirm\n"))
+    user_registration_pwd = getpass("Type a password\n")
+    user_registration_pwd_confirmation = getpass("Retype the password to confirm\n")
     if user_registration_pwd == user_registration_pwd_confirmation:
         tmp_user_registration = user_class.Users(user_registration)
         tmp_user_registration.change_password(user_registration_pwd)
