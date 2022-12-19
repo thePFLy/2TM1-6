@@ -7,6 +7,8 @@ Then, you can interact with the program if you are cooker:
   - Define a meal
   - View schedule of cooker
   - View invoice
+
+
  If you are a user:
  
  
