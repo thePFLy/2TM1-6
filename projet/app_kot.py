@@ -1,13 +1,16 @@
 from getpass import getpass
-import user as user_class
-
-# import meal
+from user import Users
+from meal import Meal as Meal
+from datetime import date
+import file_interactions
 # import Ingredient
 # import bill
 # import planning
 
-path_database = "database/users.csv"
-user_list = user_class.read_file(path_database)
+path_user = "database/users.csv"
+path_meal = "database/meal.csv"
+user_list = file_interactions.read_file_user(path_user)
+meal_list = file_interactions.read_file_meal(path_meal)
 
 
 def connection():
@@ -19,18 +22,23 @@ def connection():
     user_connexion = input("Type your username\n")
     user_connexion_pwd = getpass("Type your password\n")
     if len(user_list) > 0:
+        flag_found = False
         for user in user_list:
-            if user.username == user_connexion and user.is_correct_password(user_connexion_pwd) and user.cooker \
-                    is False:
-                print("user connected")
-                user_connected(user.username)
-            elif user.username == user_connexion and user.is_correct_password(user_connexion_pwd) \
-                    and user.cooker:
+            if user_connexion != user.username:
+                continue
+            flag_found = True
+            if user.is_correct_password(user_connexion_pwd) and user.cooker:
                 print("cooker connected")
                 cooker_connected(user.username)
+            elif user.is_correct_password(user_connexion_pwd):
+                print("user connected")
+                user_connected(user.username)
             else:
                 print("invalid pwd or user")
                 introduction()
+        if flag_found is False:
+            print("invalid pwd or user")
+            introduction()
     else:
         print("you don't have an account yet please register")
         introduction()
@@ -46,10 +54,10 @@ def registration():
     user_registration_pwd = getpass("Type a password\n")
     user_registration_pwd_confirmation = getpass("Retype the password to confirm\n")
     if user_registration_pwd == user_registration_pwd_confirmation:
-        tmp_user_registration = user_class.Users(user_registration)
+        tmp_user_registration = Users(user_registration)
         tmp_user_registration.change_password(user_registration_pwd)
-        user_class.add_user_database(tmp_user_registration, user_list)
-        user_class.write_file(path_database, user_list)
+        file_interactions.add_user_database(tmp_user_registration, user_list)
+        file_interactions.write_file_user(path_user, user_list)
         introduction()
     else:
         print("you did not enter the same password")
@@ -65,8 +73,8 @@ def delete_user():
     user_to_delete_pwd = str(input("Are you sure to delete your account ? Type your password to delete it\n"))
     for user in user_list:
         if user.username == user_to_delete and user.is_correct_password(user_to_delete_pwd):
-            user_class.delete_user_database(user_class.Users(user_to_delete), user_list)
-            user_class.write_file(path_database, user_list)
+            file_interactions.delete_user_database(Users(user_to_delete), user_list)
+            file_interactions.write_file_user(path_user, user_list)
             print("your account has been deleted")
             introduction()
     else:
@@ -112,7 +120,7 @@ def user_connected(username):
     choice_task = int(input(
         "Type:\n  1 see the schedule.\n  2 register for the meal of the day.\n  3 unsubscribe to meal of the day."
         "\n 4 see invoice.\n 5 change password.\n 6 Sign out.\n"))
-    while 1 > choice_task > 8:
+    while 1 > choice_task > 6:
         choice_task = int(input(
             "Type:\n  1 see the schedule.\n  2 register for the meal of the day.\n  3 unsubscribe to meal of the day."
             "\n 4 see invoice.\n 5 change password.\n 6 Sign out.\n"))
@@ -121,10 +129,28 @@ def user_connected(username):
         pass
     elif choice_task == 2:
         # register for the meal of the day
+        # if len(meal_list) > 0:
+        #     for meal_in in meal_list:
+        #         today = date.today()
+        #         if meal_in.date == today.strftime("%d/%m/%Y") \
+        #                 and user_list[index_user].username not in meal_in.participants:
+        #             meal_in.subscribe(user_list[index_user])
+        #             file_interactions.write_file_meal(path_meal, meal_list)
+        # change bill
         pass
+
     elif choice_task == 3:
         # unsubscribe to meal of the day
+        # if len(meal_list) > 0:
+        #     for meal_in in meal_list:
+        #         today = date.today()
+        #         if meal_in.date == today.strftime("%d/%m/%Y") \
+        #                 and user_list[index_user].username not in meal_in.participants:
+        #             meal_in.unsubscribe(user_list[index_user].username)
+        #             file_interactions.write_file_meal(path_meal, meal_list)
+        # change bill
         pass
+
     elif choice_task == 4:
         # See invoice
         pass
@@ -139,7 +165,7 @@ def user_connected(username):
         confirm = str(input("Type yes to confirm or something else to quit\n"))
         if confirm == "yes":
             user_list[index_user].change_password(user_new_pwd, user_old_pwd)
-            user_class.write_file(path_database, user_list)
+            file_interactions.write_file_user(path_user, user_list)
             print("The password has been changed")
             user_connected(username)
         else:
@@ -165,7 +191,7 @@ def cooker_connected(username):
     choice_task = int(input(
         "Type:\n  1 see the schedule.\n 2 Define the meal of the day (price and description).\n "
         "3 see invoice.\n 4 change password.\n 5 Sign out.\n"))
-    while 1 > choice_task > 8:
+    while 1 > choice_task > 5:
         choice_task = int(input(
             "Type:\n  1 see the schedule.\n 2 Define the meal of the day (price and description).\n "
             "3 see invoice.\n 4 change password.\n 5 Sign out.\n"))
@@ -174,12 +200,19 @@ def cooker_connected(username):
         pass
     elif choice_task == 2:
         #  Define the meal of the day
+        # print("------Meal of the day-----")
+        # meal_description = input("Type the description of the meal\n")
+        # meal_date = input("Type the date of the meal (dd/mm/yyyy)\n")
+        # tmp_meal_definition = Meal(meal_description, meal_date, user_list[index_user].username)
+        # file_interactions.add_meal_database(tmp_meal_definition, meal_list)
+        # file_interactions.write_file_meal(path_meal, meal_list)
+        # cooker_connected(user_list[index_user])
         pass
     elif choice_task == 3:
         # see invoice
         pass
     elif choice_task == 4:
-        # change password
+        # change cooker password
         user_old_pwd = str(input("Type the old password\n"))
         if user_list[index_user].is_correct_password(user_old_pwd):
             pass
@@ -189,7 +222,7 @@ def cooker_connected(username):
         confirm = str(input("Type yes to confirm or something else to quit\n"))
         if confirm == "yes":
             user_list[index_user].change_password(user_new_pwd, user_old_pwd)
-            user_class.write_file(path_database, user_list)
+            file_interactions.write_file_user(path_user, user_list)
             print("The password has been changed")
             user_connected(username)
         else:
