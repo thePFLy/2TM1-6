@@ -1,8 +1,7 @@
 
 class Meal:
     """ class meal """
-
-    def __init__(self, description, date, cooker, participants=None):
+    def __init__(self, description, date, cooker, price_by_user: int, participants=None):
         """"
             this function allows you to create a meal object
             PRE: a str Description, Date, cooker who is the responsible for the meal and the list of participants
@@ -14,9 +13,10 @@ class Meal:
         self.date = date
         self.participants = participants
         self.cooker = cooker
+        self.price_by_user = price_by_user
 
     def __str__(self):
-        return f'{self._description},{self.date},{self.cooker},{self.participants}'
+        return f'{self._description},{self.date},{self.cooker},{self.price_by_user},{self.participants}'
 
     def get_description(self):
         """

@@ -3,14 +3,15 @@ from user import Users
 from meal import Meal as Meal
 from datetime import date
 import file_interactions
-# import Ingredient
-# import bill
+from bill import Bill
 # import planning
 
 path_user = "database/users.csv"
 path_meal = "database/meal.csv"
+path_bill = "database/bill.csv"
 user_list = file_interactions.read_file_user(path_user)
 meal_list = file_interactions.read_file_meal(path_meal)
+bill_list = file_interactions.read_file_bill(path_bill)
 
 
 def connection():
@@ -89,11 +90,11 @@ def introduction():
     """
     print("-----Welcome on user connexion-----")
     introduction_connexion = int(input(
-        "Type:\n  1 log in.\n  2 register.\n  3 delete account.\n 4 exit the program.\n"))
+        "Type:\n 1 log in.\n 2 register.\n 3 delete account\n 4 reset invoices to 0.\n 5 exit the program.\n"))
     while introduction_connexion != 1 and introduction_connexion != 2 and introduction_connexion != 3 \
-            and introduction_connexion != 4:
+            and introduction_connexion != 4 and introduction_connexion != 5:
         introduction_connexion = int(input(
-            "Type:\n  1 log in.\n  2 register.\n  3 exit the program\n"))
+            "Type:\n 1 log in.\n 2 register.\n 3 delete account\n 4 reset invoices to 0.\n 5 exit the program.\n"))
     if introduction_connexion == 1:
         connection()
     elif introduction_connexion == 2:
@@ -101,6 +102,11 @@ def introduction():
     elif introduction_connexion == 3:
         delete_user()
     elif introduction_connexion == 4:
+        for bill_in in bill_list:
+            bill_in.price = 0
+            bill_in.status = False
+        file_interactions.write_file_bill(path_bill, bill_list)
+    elif introduction_connexion == 5:
         exit()
 
 
@@ -116,44 +122,64 @@ def user_connected(username):
     for user in user_list:
         if username == user.username:
             index_user = user_list.index(user)
+
+    file_interactions.add_bill_database(Bill(username, 0), bill_list)
+    file_interactions.write_file_bill(path_bill, bill_list)
+
+    index_bill = 0
+    for bill in bill_list:
+        if username == bill.username:
+            index_bill = bill_list.index(bill)
+
     print("-----Welcome on dining kot manager-----")
     choice_task = int(input(
-        "Type:\n  1 see the schedule.\n  2 register for the meal of the day.\n  3 unsubscribe to meal of the day."
+        "Type:\n 1 see the schedule.\n 2 register for the meal of the day.\n 3 unsubscribe to meal of the day."
         "\n 4 see invoice.\n 5 change password.\n 6 Sign out.\n"))
     while 1 > choice_task > 6:
         choice_task = int(input(
-            "Type:\n  1 see the schedule.\n  2 register for the meal of the day.\n  3 unsubscribe to meal of the day."
+            "Type:\n 1 see the schedule.\n 2 register for the meal of the day.\n 3 unsubscribe to meal of the day."
             "\n 4 see invoice.\n 5 change password.\n 6 Sign out.\n"))
     if choice_task == 1:
         # see the schedule of cooker
         pass
     elif choice_task == 2:
-        # register for the meal of the day
-        # if len(meal_list) > 0:
-        #     for meal_in in meal_list:
-        #         today = date.today()
-        #         if meal_in.date == today.strftime("%d/%m/%Y") \
-        #                 and user_list[index_user].username not in meal_in.participants:
-        #             meal_in.subscribe(user_list[index_user])
-        #             file_interactions.write_file_meal(path_meal, meal_list)
-        # change bill
-        pass
+        # register for the meal
+        if len(meal_list) > 0:
+            for meal_in in meal_list:
+                today = date.today()
+                if meal_in.date == today.strftime("%d/%m/%Y") \
+                        and user_list[index_user].username not in meal_in.participants:
+                    if user_list[index_user].username not in meal_in.participants:
+                        bill_list[index_bill].price = int(bill_list[index_bill].price) - int(meal_in.price_by_user)
+                        index_cooker = 0
+                        for bill in bill_list:
+                            if meal_in.cooker == bill.username:
+                                index_cooker = bill_list.index(bill)
+                        bill_list[index_cooker].price = int(bill_list[index_cooker].price) + int(meal_in.price_by_user)
+                    meal_in.subscribe(user_list[index_user])
+                    file_interactions.write_file_meal(path_meal, meal_list)
+                    file_interactions.write_file_bill(path_bill, bill_list)
 
     elif choice_task == 3:
         # unsubscribe to meal of the day
-        # if len(meal_list) > 0:
-        #     for meal_in in meal_list:
-        #         today = date.today()
-        #         if meal_in.date == today.strftime("%d/%m/%Y") \
-        #                 and user_list[index_user].username not in meal_in.participants:
-        #             meal_in.unsubscribe(user_list[index_user].username)
-        #             file_interactions.write_file_meal(path_meal, meal_list)
-        # change bill
-        pass
+        if len(meal_list) > 0:
+            for meal_in in meal_list:
+                today = date.today()
+                if meal_in.date == today.strftime("%d/%m/%Y") \
+                        and user_list[index_user].username not in meal_in.participants:
+                    if user_list[index_user].username not in meal_in.participants:
+                        bill_list[index_bill].price = int(bill_list[index_bill].price) + int(meal_in.price_by_user)
+                    index_cooker = 0
+                    for bill in bill_list:
+                        if meal_in.cooker == bill.username:
+                            index_cooker = bill_list.index(bill)
+                    bill_list[index_cooker].price = int(bill_list[index_cooker].price) - int(meal_in.price_by_user)
+                    meal_in.unsubscribe(user_list[index_user])
+                    file_interactions.write_file_meal(path_meal, meal_list)
+                    file_interactions.write_file_bill(path_bill, bill_list)
 
     elif choice_task == 4:
-        # See invoice
-        pass
+        bill_list[index_bill].get_bill()
     elif choice_task == 5:
         # change the user's password if he confirms with his old password
         user_old_pwd = str(input("Type the old password\n"))
@@ -187,30 +213,40 @@ def cooker_connected(username):
     for user in user_list:
         if username == user.username:
             index_user = user_list.index(user)
+
+    index_bill_cooker = 0
+    for bill in bill_list:
+        if username == bill.username:
+            index_bill_cooker = bill_list.index(bill)
+
+    file_interactions.add_bill_database(Bill(user_list[index_user].username, 0), bill_list)
+    for bill in bill_list:
+        print(bill.username)
+    file_interactions.write_file_bill(path_bill, bill_list)
+
     print("-----Welcome on dining kot manager-----")
     choice_task = int(input(
-        "Type:\n  1 see the schedule.\n 2 Define the meal of the day (price and description).\n "
+        "Type:\n 1 see the schedule.\n 2 Define the meal of the day (price and description).\n "
         "3 see invoice.\n 4 change password.\n 5 Sign out.\n"))
     while 1 > choice_task > 5:
         choice_task = int(input(
-            "Type:\n  1 see the schedule.\n 2 Define the meal of the day (price and description).\n "
+            "Type:\n 1 see the schedule.\n 2 Define the meal of the day (price and description).\n "
             "3 see invoice.\n 4 change password.\n 5 Sign out.\n"))
     if choice_task == 1:
         # see the schedule of cooker
         pass
     elif choice_task == 2:
         #  Define the meal of the day
-        # print("------Meal of the day-----")
-        # meal_description = input("Type the description of the meal\n")
-        # meal_date = input("Type the date of the meal (dd/mm/yyyy)\n")
-        # tmp_meal_definition = Meal(meal_description, meal_date, user_list[index_user].username)
-        # file_interactions.add_meal_database(tmp_meal_definition, meal_list)
-        # file_interactions.write_file_meal(path_meal, meal_list)
-        # cooker_connected(user_list[index_user])
-        pass
+        print("------Meal of the day-----")
+        meal_description = input("Type the description of the meal\n")
+        meal_date = input("Type the date of the meal (dd/mm/yyyy)\n")
+        meal_price = int(input("Type the price of the meal\n"))
+        tmp_meal_definition = Meal(meal_description, meal_date, user_list[index_user].username, meal_price)
+        file_interactions.add_meal_database(tmp_meal_definition, meal_list)
+        file_interactions.write_file_meal(path_meal, meal_list)
+        cooker_connected(user_list[index_user])
     elif choice_task == 3:
-        # see invoice
-        pass
+        bill_list[index_bill_cooker].get_bill()
     elif choice_task == 4:
         # change cooker password
         user_old_pwd = str(input("Type the old password\n"))
