@@ -94,14 +94,14 @@ def get_planning(students, planning, day):
     # if there is already a cooker, it deletes his cooker status (cooker = False)
     for day in planning:
         for student in students:
-            if day[1] == student.username:
+            if day.username == student.username:
                 if student._cooker:
                     student._cooker = False
 
     for day in planning:
         for student in students:
-            if day[0] == day:
-                if day[1] == student.username:
+            if day.date == day:
+                if day.username == student.username:
                     student._cooker = True
 
     if difference.days >= 7:
