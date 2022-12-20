@@ -156,39 +156,43 @@ def user_connected(username):
         pass
     elif choice_task == "2":
         # register for a meal
+        meal_date = input("Enter the date of the meal you want to attend")
         if len(meal_list) > 0:
             for meal_in in meal_list:
-                today = date.today()
-                if meal_in.date == today.strftime("%d/%m/%Y") \
-                        and user_list[index_user].username not in meal_in.participants:
-                    if user_list[index_user].username not in meal_in.participants:
-                        bill_list[index_bill].price = int(bill_list[index_bill].price) - int(meal_in.price_by_user)
-                        index_cooker = 0
-                        for bill in bill_list:
-                            if meal_in.cooker == bill.username:
-                                index_cooker = bill_list.index(bill)
-                        bill_list[index_cooker].price = int(bill_list[index_cooker].price) + int(meal_in.price_by_user)
+                if meal_in.date == meal_date and user_list[index_user].username not in meal_in.participants:
+                    print(f"here is the meal {meal_in.description}")
+                    confirm_meal = input("are you sure to participate, Type 'yes' to confirm or other to quit")
+                    if confirm_meal == "yes":
+                        if user_list[index_user].username not in meal_in.participants:
+                            bill_list[index_bill].price = int(bill_list[index_bill].price) - int(meal_in.price_by_user)
+                            index_cooker = 0
+                            for bill in bill_list:
+                                if meal_in.cooker == bill.username:
+                                    index_cooker = bill_list.index(bill)
+                            bill_list[index_cooker].price = \
+                                int(bill_list[index_cooker].price) + int(meal_in.price_by_user)
+                            user_connected(username)
+                        else:
+                            print("You are already registered")
+                            user_connected(username)
+                        meal_in.subscribe(user_list[index_user])
+                        file_interactions.write_file_meal(path_meal, meal_list)
+                        file_interactions.write_file_bill(path_bill, bill_list)
                         user_connected(username)
                     else:
-                        print("You are already registered")
                         user_connected(username)
-                    meal_in.subscribe(user_list[index_user])
-                    file_interactions.write_file_meal(path_meal, meal_list)
-                    file_interactions.write_file_bill(path_bill, bill_list)
-                    user_connected(username)
                 else:
-                    print("there is no meal planned today")
+                    print("invalid date")
                     user_connected(username)
-        print("no meals have been registered yet")
-        user_connected(username)
+            print("no meals have been registered yet")
+            user_connected(username)
 
     elif choice_task == "3":
         # unsubscribe to meal of the day
         if len(meal_list) > 0:
             for meal_in in meal_list:
-                today = date.today()
-                if meal_in.date == today.strftime("%d/%m/%Y") \
-                        and user_list[index_user].username not in meal_in.participants:
+                meal_date = input("Enter the date of the meal you want to unsubscribe")
+                if meal_in.date == meal_date and user_list[index_user].username not in meal_in.participants:
                     if user_list[index_user].username not in meal_in.participants:
                         bill_list[index_bill].price = int(bill_list[index_bill].price) + int(meal_in.price_by_user)
                     index_cooker = 0
@@ -199,6 +203,8 @@ def user_connected(username):
                     meal_in.unsubscribe(user_list[index_user])
                     file_interactions.write_file_meal(path_meal, meal_list)
                     file_interactions.write_file_bill(path_bill, bill_list)
+                else:
+                    print("you are already registered or the meal does not exist")
         user_connected(username)
 
     elif choice_task == "4":
@@ -250,7 +256,7 @@ def cooker_connected(username):
 
     print("-----Welcome on dining kot manager-----")
     choice_task = input(
-        "Type:\n 1 see the schedule.\n 2 Define the meal of the day (price and description).\n "
+        "Type:\n 1 see the schedule.\n 2 Define the meal (price and description).\n "
         "3 see invoice.\n 4 change password.\n 5 Sign out.\n")
     while choice_task != "1" and choice_task != "2" and choice_task != "3" \
             and choice_task != "4" and choice_task != "5":
@@ -261,12 +267,18 @@ def cooker_connected(username):
         # see the schedule of cooker
         pass
     elif choice_task == "2":
-        #  Define the meal of the day
+        #  Define the meal
         print("------Meal of the day-----")
         meal_description = input("Type the description of the meal\n")
-        meal_date = input("Type the date of the meal (dd/mm/yyyy)\n")
         meal_price = int(input("Type the price of the meal\n"))
-        tmp_meal_definition = Meal(meal_description, meal_date, user_list[index_user].username, meal_price)
+        date_cooker = None
+        for date_planning in planning_list:
+            if len(planning_list) < 1:
+                print("no definite schedule yet")
+            else:
+                if user_list[index_user].username == date_planning.username:
+                    date_cooker = date_planning.date
+        tmp_meal_definition = Meal(meal_description, date_cooker, user_list[index_user].username, meal_price)
         file_interactions.add_meal_database(tmp_meal_definition, meal_list)
         file_interactions.write_file_meal(path_meal, meal_list)
         cooker_connected(username)
