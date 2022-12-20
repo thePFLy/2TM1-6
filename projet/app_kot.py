@@ -106,6 +106,8 @@ def introduction():
             bill_in.price = 0
             bill_in.payBill()
         file_interactions.write_file_bill(path_bill, bill_list)
+        print("the invoices have been reset to 0")
+        introduction()
     elif introduction_connexion == 5:
         exit()
 
@@ -159,6 +161,7 @@ def user_connected(username):
                     meal_in.subscribe(user_list[index_user])
                     file_interactions.write_file_meal(path_meal, meal_list)
                     file_interactions.write_file_bill(path_bill, bill_list)
+        user_connected(username)
 
     elif choice_task == 3:
         # unsubscribe to meal of the day
@@ -177,9 +180,11 @@ def user_connected(username):
                     meal_in.unsubscribe(user_list[index_user])
                     file_interactions.write_file_meal(path_meal, meal_list)
                     file_interactions.write_file_bill(path_bill, bill_list)
+        user_connected(username)
 
     elif choice_task == 4:
         bill_list[index_bill].get_bill()
+        user_connected(username)
     elif choice_task == 5:
         # change the user's password if he confirms with his old password
         user_old_pwd = str(input("Type the old password\n"))
@@ -244,9 +249,10 @@ def cooker_connected(username):
         tmp_meal_definition = Meal(meal_description, meal_date, user_list[index_user].username, meal_price)
         file_interactions.add_meal_database(tmp_meal_definition, meal_list)
         file_interactions.write_file_meal(path_meal, meal_list)
-        cooker_connected(user_list[index_user])
+        cooker_connected(username)
     elif choice_task == 3:
         bill_list[index_bill_cooker].get_bill()
+        cooker_connected(username)
     elif choice_task == 4:
         # change cooker password
         user_old_pwd = str(input("Type the old password\n"))
@@ -260,9 +266,9 @@ def cooker_connected(username):
             user_list[index_user].change_password(user_new_pwd, user_old_pwd)
             file_interactions.write_file_user(path_user, user_list)
             print("The password has been changed")
-            user_connected(username)
+            introduction()
         else:
-            user_connected(username)
+            cooker_connected(username)
     elif choice_task == 5:
         # Sign out
         introduction()
