@@ -159,9 +159,18 @@ def user_connected(username):
                             if meal_in.cooker == bill.username:
                                 index_cooker = bill_list.index(bill)
                         bill_list[index_cooker].price = int(bill_list[index_cooker].price) + int(meal_in.price_by_user)
+                        user_connected(username)
+                    else:
+                        print("You are already registered")
+                        user_connected(username)
                     meal_in.subscribe(user_list[index_user])
                     file_interactions.write_file_meal(path_meal, meal_list)
                     file_interactions.write_file_bill(path_bill, bill_list)
+                    user_connected(username)
+                else:
+                    print("there is no meal planned today")
+                    user_connected(username)
+        print("no meals have been registered yet")
         user_connected(username)
 
     elif choice_task == "3":
