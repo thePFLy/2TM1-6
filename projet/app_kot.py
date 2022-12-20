@@ -104,7 +104,7 @@ def introduction():
     elif introduction_connexion == 4:
         for bill_in in bill_list:
             bill_in.price = 0
-            bill_in.status = False
+            bill_in.payBill()
         file_interactions.write_file_bill(path_bill, bill_list)
     elif introduction_connexion == 5:
         exit()
