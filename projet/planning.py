@@ -1,9 +1,9 @@
 import random
-from user import Users
 import csv
-from datetime import datetime, date, timedelta
+from datetime import datetime, timedelta
 import logging
 from class_plan import Planning
+
 
 def DDay():
     """
@@ -29,8 +29,8 @@ def newDDay():
         PRE : csv file DDay.csv
         POST : new date stored in DDay.csv
     """
-    newdate = datetime.today()
-    formatted_date = newdate.strftime('%d-%m-%Y')
+    new_date = datetime.today()
+    formatted_date = new_date.strftime('%d-%m-%Y')
     try:
         with open('database/DDay.csv', 'w') as csvfile:
             fieldnames = ['Date']
@@ -43,7 +43,7 @@ def newDDay():
 
 def init_planning(path: str):
     """
-        initialise a list of list of Day associated with a User
+        initialise a list of Day associated with a User
         to determine the day of cooking
         PRE : a csv file planning.csv
         POST : a list of list with day and the name of the user
@@ -54,7 +54,7 @@ def init_planning(path: str):
         with open(path) as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
-                day = Planning(row["Name"],row["Day"])
+                day = Planning(row["Name"], row["Day"])
                 planning.append(day)
         return planning
     except IOError:
@@ -63,7 +63,7 @@ def init_planning(path: str):
         raise ValueError('No data available')
 
 
-def change_planning(week):
+def change_planning(week_plan):
     """
         change the current planning in the planning.csv file with a new planning
         PRE : a csv file planning.csv, a list of day and user
@@ -75,32 +75,32 @@ def change_planning(week):
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             writer.writerow(
                 {'Day': 'Day', 'Name': 'Name'})
-            for i in week:
+            for i in week_plan:
                 writer.writerow({'Day': i[1].strftime('%d-%m-%Y'), 'Name': i[0]})
     except OSError as e:
         print(type(e), e)
 
 
-def get_planning(students, planning, dday):
+def get_planning(students, planning, day):
     """
-            a function that creates a schedule, selects 7 students or less, and spreads them over 7 days starting today
+            a function that creates a schedule, selects 7 students or fewer, and spreads them over 7 days starting today
             PRE : a list of object user, a list of day with user, a date
             POST : create a planning
             RAISE : Exception if the list of object user is empty
     """
+    global week
     today = datetime.today()
-    today_date = today.strftime('%d-%m-%Y')
-    difference = today - dday
-    # if there is already a cooker, it delete his cooker status (cooker = False)
+    difference = today - day
+    # if there is already a cooker, it deletes his cooker status (cooker = False)
     for day in planning:
         for student in students:
             if day[1] == student.username:
-                if student._cooker == True:
+                if student._cooker:
                     student._cooker = False
 
     for day in planning:
         for student in students:
-            if day[0] == dday:
+            if day[0] == day:
                 if day[1] == student.username:
                     student._cooker = True
 
@@ -185,8 +185,3 @@ def get_planning(students, planning, dday):
         change_planning(week)
     else:
         pass
-
-listuser = init_planning()
-print(listuser)
-for i in listuser:
-    print(i.username)

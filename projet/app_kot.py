@@ -14,7 +14,10 @@ path_planning = "database/planning.csv"
 user_list = file_interactions.read_file_user(path_user)
 meal_list = file_interactions.read_file_meal(path_meal)
 bill_list = file_interactions.read_file_bill(path_bill)
-planning_list = init_planning()
+planning_list = planning.init_planning(path_planning)
+DDay = planning.DDay()
+planning.get_planning(user_list, planning_list, DDay)
+print(planning_list)
 
 
 def connection():
