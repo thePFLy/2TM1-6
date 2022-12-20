@@ -7,10 +7,10 @@ from class_plan import Planning
 
 def DDay():
     """
-        initiate the date stored in DDay.csv
-        PRE : csv file DDay.csv
-        POST : the date in DDay.csv
-        RAISE : ValueError if the csv is empty
+    initiate the date stored in DDay.csv
+    PRE : csv file DDay.csv
+    POST : the date in DDay.csv
+    RAISE : ValueError if the csv is empty
     """
     try:
         with open('database/DDay.csv') as csvfile:
@@ -25,9 +25,9 @@ def DDay():
 
 def newDDay():
     """
-        change the date stored in DDay.csv with the date of today
-        PRE : csv file DDay.csv
-        POST : new date stored in DDay.csv
+    change the date stored in DDay.csv with the date of today
+    PRE : csv file DDay.csv
+    POST : new date stored in DDay.csv
     """
     new_date = datetime.today()
     formatted_date = new_date.strftime('%d-%m-%Y')
@@ -43,11 +43,12 @@ def newDDay():
 
 def init_planning(path: str):
     """
-        initialise a list of Day associated with a User
-        to determine the day of cooking
-        PRE : a csv file planning.csv
-        POST : a list of list with day and the name of the user
-        RAISE : ValueError if the csv is empty
+    initialise a list of Day associated with a User
+    to determine the day of cooking
+    PRE :
+    :path, string path a csv file planning.csv
+    POST : a list of list with day and the name of the user
+    RAISE : ValueError if the csv is empty
     """
     try:
         planning = []
@@ -65,9 +66,10 @@ def init_planning(path: str):
 
 def change_planning(week_plan):
     """
-        change the current planning in the planning.csv file with a new planning
-        PRE : a csv file planning.csv, a list of day and user
-        POST : a new planning in the planning.csv file
+    change the current planning in the planning.csv file with a new planning
+    PRE :
+    :week_plan, list of day and user
+    POST : a new planning in the planning.csv file
     """
     try:
         with open('database/planning.csv', 'w') as csvfile:
@@ -83,10 +85,13 @@ def change_planning(week_plan):
 
 def get_planning(students, planning, day):
     """
-            a function that creates a schedule, selects 7 students or fewer, and spreads them over 7 days starting today
-            PRE : a list of object user, a list of day with user, a date
-            POST : create a planning
-            RAISE : Exception if the list of object user is empty
+    a function that creates a schedule, selects 7 students or fewer, and spreads them over 7 days starting today
+    PRE :
+    :students, list of object User
+    :planning, list of day with User
+    :day, a date
+    POST : create a planning
+    RAISE : Exception if the list of object user is empty
     """
     global week
     today = datetime.today()

@@ -1,7 +1,6 @@
 from getpass import getpass
 from user import Users
 from meal import Meal as Meal
-from datetime import date
 import file_interactions
 from bill import Bill
 import planning
@@ -14,10 +13,10 @@ user_list = file_interactions.read_file_user(path_user)
 meal_list = file_interactions.read_file_meal(path_meal)
 bill_list = file_interactions.read_file_bill(path_bill)
 planning_list = planning.init_planning(path_planning)
+
 if len(user_list) > 0:
     DDay = planning.DDay()
     planning.get_planning(user_list, planning_list, DDay)
-
 
 
 def connection():
