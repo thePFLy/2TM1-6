@@ -1,4 +1,5 @@
 import random
+from user import Users
 import csv
 from datetime import datetime, date, timedelta
 import logging
@@ -29,7 +30,21 @@ def newDDay():
     except OSError as e:
         print(type(e), e)
 
-
+def init_planning():
+    try:
+        planning = []
+        with open('database/planning.csv') as csvfile:
+            reader = csv.DictReader(csvfile)
+            for row in reader:
+                sous_plan = []
+                sous_plan.append(datetime.strptime(row["Day"], "%d-%m-%Y"))
+                sous_plan.append(row["Name"])
+                planning.append(sous_plan)
+        return planning
+    except IOError:
+        logging.exception('')
+    if not reader:
+        raise ValueError('No data available')
 
 def change_planning(week):
     try:
@@ -46,10 +61,23 @@ def change_planning(week):
 
 
 
-def planning(students):
+def get_planning(students,planning):
     today = datetime.today()
     today_date = today.strftime('%d-%m-%Y')
     difference = today - DDay
+    #if there is already a cooker, it delete his cooker status (cooker = False)
+    for day in the_planning:
+        for student in etudiants:
+            if day[1] == student.username:
+                if student._cooker == True:
+                    student._cooker = False
+
+    for day in the_planning:
+        for student in etudiants:
+            if day[0] == DDay:
+                if day[1] == student.username:
+                    student._cooker = True
+                    
     if difference.days >= 7:
         newDDay()
         print("A change in the schedule has taken place")
@@ -63,67 +91,67 @@ def planning(students):
 
         # Spreading the students over the different days of the week
         if len(selected_students) == 1:
-            day1 = [selected_students[0],today]
-            day2 = [selected_students[0],today+timedelta(days=1)]
-            day3 = [selected_students[0],today+timedelta(days=2)]
-            day4 = [selected_students[0],today+timedelta(days=3)]
-            day5 = [selected_students[0],today+timedelta(days=4)]
-            day6 = [selected_students[0],today+timedelta(days=5)]
-            day7 = [selected_students[0],today+timedelta(days=6)]
+            day1 = [selected_students[0].username,today]
+            day2 = [selected_students[0].username,today+timedelta(days=1)]
+            day3 = [selected_students[0].username,today+timedelta(days=2)]
+            day4 = [selected_students[0].username,today+timedelta(days=3)]
+            day5 = [selected_students[0].username,today+timedelta(days=4)]
+            day6 = [selected_students[0].username,today+timedelta(days=5)]
+            day7 = [selected_students[0].username,today+timedelta(days=6)]
             week = [day1,day2,day3,day4,day5,day6,day7]
         if len(selected_students) == 2:
-            day1 = [selected_students[0], today]
-            day2 = [selected_students[1], today + timedelta(days=1)]
-            day3 = [selected_students[0], today + timedelta(days=2)]
-            day4 = [selected_students[1], today + timedelta(days=3)]
-            day5 = [selected_students[0], today + timedelta(days=4)]
-            day6 = [selected_students[1], today + timedelta(days=5)]
-            day7 = [selected_students[0], today + timedelta(days=6)]
+            day1 = [selected_students[0].username, today]
+            day2 = [selected_students[1].username, today + timedelta(days=1)]
+            day3 = [selected_students[0].username, today + timedelta(days=2)]
+            day4 = [selected_students[1].username, today + timedelta(days=3)]
+            day5 = [selected_students[0].username, today + timedelta(days=4)]
+            day6 = [selected_students[1].username, today + timedelta(days=5)]
+            day7 = [selected_students[0].username, today + timedelta(days=6)]
             week = [day1, day2, day3, day4, day5, day6, day7]
         if len(selected_students) == 3:
-            day1 = [selected_students[0], today]
-            day2 = [selected_students[1], today + timedelta(days=1)]
-            day3 = [selected_students[2], today + timedelta(days=2)]
-            day4 = [selected_students[0], today + timedelta(days=3)]
-            day5 = [selected_students[1], today + timedelta(days=4)]
-            day6 = [selected_students[2], today + timedelta(days=5)]
-            day7 = [selected_students[0], today + timedelta(days=6)]
+            day1 = [selected_students[0].username, today]
+            day2 = [selected_students[1].username, today + timedelta(days=1)]
+            day3 = [selected_students[2].username, today + timedelta(days=2)]
+            day4 = [selected_students[0].username, today + timedelta(days=3)]
+            day5 = [selected_students[1].username, today + timedelta(days=4)]
+            day6 = [selected_students[2].username, today + timedelta(days=5)]
+            day7 = [selected_students[0].username, today + timedelta(days=6)]
             week = [day1, day2, day3, day4, day5, day6, day7]
         if len(selected_students) == 4:
-            day1 = [selected_students[0], today]
-            day2 = [selected_students[1], today + timedelta(days=1)]
-            day3 = [selected_students[2], today + timedelta(days=2)]
-            day4 = [selected_students[3], today + timedelta(days=3)]
-            day5 = [selected_students[0], today + timedelta(days=4)]
-            day6 = [selected_students[1], today + timedelta(days=5)]
-            day7 = [selected_students[2], today + timedelta(days=6)]
+            day1 = [selected_students[0].username, today]
+            day2 = [selected_students[1].username, today + timedelta(days=1)]
+            day3 = [selected_students[2].username, today + timedelta(days=2)]
+            day4 = [selected_students[3].username, today + timedelta(days=3)]
+            day5 = [selected_students[0].username, today + timedelta(days=4)]
+            day6 = [selected_students[1].username, today + timedelta(days=5)]
+            day7 = [selected_students[2].username, today + timedelta(days=6)]
             week = [day1, day2, day3, day4, day5, day6, day7]
         if len(selected_students) == 5:
-            day1 = [selected_students[0], today]
-            day2 = [selected_students[1], today + timedelta(days=1)]
-            day3 = [selected_students[3], today + timedelta(days=2)]
-            day4 = [selected_students[4], today + timedelta(days=3)]
-            day5 = [selected_students[2], today + timedelta(days=4)]
-            day6 = [selected_students[1], today + timedelta(days=5)]
-            day7 = [selected_students[3], today + timedelta(days=6)]
+            day1 = [selected_students[0].username, today]
+            day2 = [selected_students[1].username, today + timedelta(days=1)]
+            day3 = [selected_students[3].username, today + timedelta(days=2)]
+            day4 = [selected_students[4].username, today + timedelta(days=3)]
+            day5 = [selected_students[2].username, today + timedelta(days=4)]
+            day6 = [selected_students[1].username, today + timedelta(days=5)]
+            day7 = [selected_students[3].username, today + timedelta(days=6)]
             week = [day1, day2, day3, day4, day5, day6, day7]
         if len(selected_students) == 6:
-            day1 = [selected_students[0], today]
-            day2 = [selected_students[4], today + timedelta(days=1)]
-            day3 = [selected_students[1], today + timedelta(days=2)]
-            day4 = [selected_students[2], today + timedelta(days=3)]
-            day5 = [selected_students[5], today + timedelta(days=4)]
-            day6 = [selected_students[3], today + timedelta(days=5)]
-            day7 = [selected_students[0], today + timedelta(days=6)]
+            day1 = [selected_students[0].username, today]
+            day2 = [selected_students[4].username, today + timedelta(days=1)]
+            day3 = [selected_students[1].username, today + timedelta(days=2)]
+            day4 = [selected_students[2].username, today + timedelta(days=3)]
+            day5 = [selected_students[5].username, today + timedelta(days=4)]
+            day6 = [selected_students[3].username, today + timedelta(days=5)]
+            day7 = [selected_students[0].username, today + timedelta(days=6)]
             week = [day1, day2, day3, day4, day5, day6, day7]
         if len(selected_students) > 6:
-            day1 = [selected_students[0], today]
-            day2 = [selected_students[1], today + timedelta(days=1)]
-            day3 = [selected_students[2], today + timedelta(days=2)]
-            day4 = [selected_students[3], today + timedelta(days=3)]
-            day5 = [selected_students[4], today + timedelta(days=4)]
-            day6 = [selected_students[5], today + timedelta(days=5)]
-            day7 = [selected_students[6], today + timedelta(days=6)]
+            day1 = [selected_students[0].username, today]
+            day2 = [selected_students[1].username, today + timedelta(days=1)]
+            day3 = [selected_students[2].username, today + timedelta(days=2)]
+            day4 = [selected_students[3].username, today + timedelta(days=3)]
+            day5 = [selected_students[4].username, today + timedelta(days=4)]
+            day6 = [selected_students[5].username, today + timedelta(days=5)]
+            day7 = [selected_students[6].username, today + timedelta(days=6)]
             week = [day1, day2, day3, day4, day5, day6, day7]
         change_planning(week)
     else:
@@ -132,7 +160,28 @@ def planning(students):
 
 
 DDay = DDay()
+the_planning = init_planning()
 
 # test
-etudiants = ["Etudiant 1", "Etudiant 2", "Etudiant 3", "Etudiant 4", "Etudiant 5"]
-planning(etudiants)
+user1 = Users('brice', '0000')
+user2 = Users('ronald', '0001')
+user3 = Users('toto', '0002')
+user4 = Users('tata', '0003')
+etudiants = [user1,user2,user3,user4]
+get_planning(etudiants,the_planning)
+    """
+    for day in the_planning:
+        for student in etudiants:
+            if day[1] == student.username:
+                if student._cooker == True:
+                    student._cooker = False
+    
+    for day in the_planning:
+        for student in etudiants:
+            if day[0] == DDay:
+                if day[1] == student.username:
+                    student._cooker = True
+    
+    for i in etudiants:
+        print(i._cooker)
+    """
