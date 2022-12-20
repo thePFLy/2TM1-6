@@ -14,8 +14,10 @@ user_list = file_interactions.read_file_user(path_user)
 meal_list = file_interactions.read_file_meal(path_meal)
 bill_list = file_interactions.read_file_bill(path_bill)
 planning_list = planning.init_planning(path_planning)
-DDay = planning.DDay()
-planning.get_planning(user_list, planning_list, DDay)
+if len(user_list) > 0:
+    DDay = planning.DDay()
+    planning.get_planning(user_list, planning_list, DDay)
+
 
 
 def connection():
