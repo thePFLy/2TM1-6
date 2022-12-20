@@ -4,14 +4,17 @@ from meal import Meal as Meal
 from datetime import date
 import file_interactions
 from bill import Bill
-# import planning
+import planning
+from class_plan import Planning
 
 path_user = "database/users.csv"
 path_meal = "database/meal.csv"
 path_bill = "database/bill.csv"
+path_planning = "database/planning.csv"
 user_list = file_interactions.read_file_user(path_user)
 meal_list = file_interactions.read_file_meal(path_meal)
 bill_list = file_interactions.read_file_bill(path_bill)
+planning_list = init_planning()
 
 
 def connection():

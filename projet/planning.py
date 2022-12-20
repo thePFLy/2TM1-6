@@ -3,6 +3,7 @@ from user import Users
 import csv
 from datetime import datetime, date, timedelta
 import logging
+from class_plan import Planning
 
 def DDay():
     """
@@ -40,7 +41,7 @@ def newDDay():
         print(type(e), e)
 
 
-def init_planning():
+def init_planning(path: str):
     """
         initialise a list of list of Day associated with a User
         to determine the day of cooking
@@ -50,7 +51,7 @@ def init_planning():
     """
     try:
         planning = []
-        with open('database/planning.csv') as csvfile:
+        with open(path) as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
                 day = Planning(row["Name"],row["Day"])
@@ -186,5 +187,6 @@ def get_planning(students, planning, dday):
         pass
 
 listuser = init_planning()
+print(listuser)
 for i in listuser:
     print(i.username)
