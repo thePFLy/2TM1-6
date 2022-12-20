@@ -95,14 +95,14 @@ def get_planning(students, planning, day):
     for day in planning:
         for student in students:
             if day[1] == student.username:
-                if student._cooker:
-                    student._cooker = False
+                if student.cooker:
+                    student.cooker = False
 
     for day in planning:
         for student in students:
             if day[0] == day:
                 if day[1] == student.username:
-                    student._cooker = True
+                    student.cooker = True
 
     if difference.days >= 7:
         newDDay()
@@ -181,7 +181,7 @@ def get_planning(students, planning, day):
             day6 = [selected_students[5].username, today + timedelta(days=5)]
             day7 = [selected_students[6].username, today + timedelta(days=6)]
             week = [day1, day2, day3, day4, day5, day6, day7]
-        students[0]._cooker = True
+        students[0].cooker = True
         change_planning(week)
     else:
         pass
