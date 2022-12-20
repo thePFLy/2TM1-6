@@ -89,26 +89,26 @@ def introduction():
     POST: initiate login, registration, delete a user or exit program
     """
     print("-----Welcome on user connexion-----")
-    introduction_connexion = int(input(
-        "Type:\n 1 log in.\n 2 register.\n 3 delete account\n 4 reset invoices to 0.\n 5 exit the program.\n"))
-    while introduction_connexion != 1 and introduction_connexion != 2 and introduction_connexion != 3 \
-            and introduction_connexion != 4 and introduction_connexion != 5:
-        introduction_connexion = int(input(
-            "Type:\n 1 log in.\n 2 register.\n 3 delete account\n 4 reset invoices to 0.\n 5 exit the program.\n"))
-    if introduction_connexion == 1:
+    introduction_connexion = input(
+        "Type:\n 1 log in.\n 2 register.\n 3 delete account\n 4 reset invoices to 0.\n 5 exit the program.\n")
+    while introduction_connexion != "1" and introduction_connexion != "2" and introduction_connexion != "3" \
+            and introduction_connexion != "4" and introduction_connexion != "5":
+        introduction_connexion = input(
+            "Type:\n 1 log in.\n 2 register.\n 3 delete account\n 4 reset invoices to 0.\n 5 exit the program.\n")
+    if introduction_connexion == "1":
         connection()
-    elif introduction_connexion == 2:
+    elif introduction_connexion == "2":
         registration()
-    elif introduction_connexion == 3:
+    elif introduction_connexion == "3":
         delete_user()
-    elif introduction_connexion == 4:
+    elif introduction_connexion == "4":
         for bill_in in bill_list:
             bill_in.price = 0
             bill_in.payBill()
         file_interactions.write_file_bill(path_bill, bill_list)
         print("the invoices have been reset to 0")
         introduction()
-    elif introduction_connexion == 5:
+    elif introduction_connexion == "5":
         exit()
 
 
@@ -134,17 +134,18 @@ def user_connected(username):
             index_bill = bill_list.index(bill)
 
     print("-----Welcome on dining kot manager-----")
-    choice_task = int(input(
+    choice_task = input(
         "Type:\n 1 see the schedule.\n 2 register for the meal of the day.\n 3 unsubscribe to meal of the day."
-        "\n 4 see invoice.\n 5 change password.\n 6 Sign out.\n"))
-    while 1 > choice_task > 6:
-        choice_task = int(input(
+        "\n 4 see invoice.\n 5 change password.\n 6 Sign out.\n")
+    while choice_task != "1" and choice_task != "2" and choice_task != "3" \
+            and choice_task != "4" and choice_task != "5" and choice_task != "6":
+        choice_task = input(
             "Type:\n 1 see the schedule.\n 2 register for the meal of the day.\n 3 unsubscribe to meal of the day."
-            "\n 4 see invoice.\n 5 change password.\n 6 Sign out.\n"))
-    if choice_task == 1:
+            "\n 4 see invoice.\n 5 change password.\n 6 Sign out.\n")
+    if choice_task == "1":
         # see the schedule of cooker
         pass
-    elif choice_task == 2:
+    elif choice_task == "2":
         # register for the meal
         if len(meal_list) > 0:
             for meal_in in meal_list:
@@ -163,7 +164,7 @@ def user_connected(username):
                     file_interactions.write_file_bill(path_bill, bill_list)
         user_connected(username)
 
-    elif choice_task == 3:
+    elif choice_task == "3":
         # unsubscribe to meal of the day
         if len(meal_list) > 0:
             for meal_in in meal_list:
@@ -182,10 +183,10 @@ def user_connected(username):
                     file_interactions.write_file_bill(path_bill, bill_list)
         user_connected(username)
 
-    elif choice_task == 4:
+    elif choice_task == "4":
         bill_list[index_bill].get_bill()
         user_connected(username)
-    elif choice_task == 5:
+    elif choice_task == "5":
         # change the user's password if he confirms with his old password
         user_old_pwd = str(input("Type the old password\n"))
         if user_list[index_user].is_correct_password(user_old_pwd):
@@ -201,7 +202,7 @@ def user_connected(username):
             user_connected(username)
         else:
             user_connected(username)
-    elif choice_task == 6:
+    elif choice_task == "6":
         # relaunches the introduction function
         introduction()
 
@@ -230,17 +231,18 @@ def cooker_connected(username):
     file_interactions.write_file_bill(path_bill, bill_list)
 
     print("-----Welcome on dining kot manager-----")
-    choice_task = int(input(
+    choice_task = input(
         "Type:\n 1 see the schedule.\n 2 Define the meal of the day (price and description).\n "
-        "3 see invoice.\n 4 change password.\n 5 Sign out.\n"))
-    while 1 > choice_task > 5:
-        choice_task = int(input(
+        "3 see invoice.\n 4 change password.\n 5 Sign out.\n")
+    while choice_task != "1" and choice_task != "2" and choice_task != "3" \
+            and choice_task != "4" and choice_task != "5":
+        choice_task = input(
             "Type:\n 1 see the schedule.\n 2 Define the meal of the day (price and description).\n "
-            "3 see invoice.\n 4 change password.\n 5 Sign out.\n"))
-    if choice_task == 1:
+            "3 see invoice.\n 4 change password.\n 5 Sign out.\n")
+    if choice_task == "1":
         # see the schedule of cooker
         pass
-    elif choice_task == 2:
+    elif choice_task == "2":
         #  Define the meal of the day
         print("------Meal of the day-----")
         meal_description = input("Type the description of the meal\n")
@@ -250,10 +252,11 @@ def cooker_connected(username):
         file_interactions.add_meal_database(tmp_meal_definition, meal_list)
         file_interactions.write_file_meal(path_meal, meal_list)
         cooker_connected(username)
-    elif choice_task == 3:
+    elif choice_task == "3":
+        # print the bill
         bill_list[index_bill_cooker].get_bill()
         cooker_connected(username)
-    elif choice_task == 4:
+    elif choice_task == "4":
         # change cooker password
         user_old_pwd = str(input("Type the old password\n"))
         if user_list[index_user].is_correct_password(user_old_pwd):
@@ -269,7 +272,7 @@ def cooker_connected(username):
             introduction()
         else:
             cooker_connected(username)
-    elif choice_task == 5:
+    elif choice_task == "5":
         # Sign out
         introduction()
 
