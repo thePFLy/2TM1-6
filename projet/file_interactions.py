@@ -59,6 +59,12 @@ def write_file_user(path, users_list):
 
 
 def stitch_list(lst):
+    """this function allows you to from a list with different strings and these strings can contain arrays,
+    this function will combine these arrays even if they are not part of the same string
+    PRE:
+    :lst, a list with string
+    POST: write from a list, a new list with from string list "[...", "...", "...]" -> "[.........]"
+    """
     out = []
     flg = False
     tmp = []
@@ -88,10 +94,10 @@ def stitch_list(lst):
 
 
 def read_file_meal(path: str):
-    """this function allows you to read a file and append each line as user
+    """this function allows you to read a file and append each line as Meal
     PRE:
     :path, a path already created (string)
-    POST: returns a list that contains the User objects from the lines of the file as parameter
+    POST: returns a list that contains the Meal objects from the lines of the file as parameter
     """
     out = []
     with open(path, mode="r") as csvfile:
@@ -102,12 +108,12 @@ def read_file_meal(path: str):
 
 
 def add_meal_database(new_meal, meal_list):
-    """this function allows you to add User (username hashed_password, my_salt) on database (csv file)
-
+    """this function allows you to add Meal (description(str), date(date), cooker(str), price_by_user (int),
+    participants (tab)) on database (csv file)
     PRE:
-    :new_user, a User object
-    :users_list, a list of Users empty or not
-    POST: append the User object to the list if the name of the object is not already in this list
+    :new_meal, a Meal object
+    :meal_list, a list of Meal empty or not
+    POST: append the Meal object to the list if the name of the object is not already in this list
     """
     for meal in meal_list:
         if meal.date == new_meal.date:
@@ -116,11 +122,13 @@ def add_meal_database(new_meal, meal_list):
 
 
 def write_file_meal(path, meal_list):
-    """this function allows you to write objects (username hashed_password, my_salt) from list to file
+    """this function allows you to write objects (description(str), date(date), cooker(str), price_by_user (int),
+    participants (tab)) from list to file
     PRE:
     :path, a path already created of file
-    :users_list, User list empty or not
-    POST: write from a list the Users object (username hashed_password, my_salt) for each lines of the file
+    :meal_list, Meal list empty or not
+    POST: write from a list the Meal object (description(str), date(date), cooker(str), price_by_user (int),
+    participants (tab)) for each lines of the file
     """
     tmp = ""
     for meal in meal_list:
@@ -130,10 +138,10 @@ def write_file_meal(path, meal_list):
 
 
 def read_file_bill(path: str):
-    """this function allows you to read a file and append each line as user
+    """this function allows you to read a file and append each line as Bill
     PRE:
     :path, a path already created (string)
-    POST: returns a list that contains the User objects from the lines of the file as parameter
+    POST: returns a list that contains the Bill objects from the lines of the file as parameter
     """
     out = []
     with open(path, mode="r") as csvfile:
@@ -144,12 +152,12 @@ def read_file_bill(path: str):
 
 
 def add_bill_database(new_bill, bill_list):
-    """this function allows you to add User (username hashed_password, my_salt) on database (csv file)
+    """this function allows you to add Bill (username(str), price(int), status(bool)) on database (csv file)
 
     PRE:
-    :new_user, a User object
-    :users_list, a list of Users empty or not
-    POST: append the User object to the list if the name of the object is not already in this list
+    :new_bill, a Bill object
+    :bill_list, a list of Bill empty or not
+    POST: append the Bill object to the list if the name of the object is not already in this list
     """
     for bill in bill_list:
         if bill.username == new_bill.username:
@@ -158,11 +166,11 @@ def add_bill_database(new_bill, bill_list):
 
 
 def write_file_bill(path, bill_list):
-    """this function allows you to write objects (username hashed_password, my_salt) from list to file
+    """this function allows you to write Bill objects (username(str), price(int), status(bool)) from list to file
     PRE:
     :path, a path already created of file
-    :users_list, User list empty or not
-    POST: write from a list the Users object (username hashed_password, my_salt) for each lines of the file
+    :bill_list, Bill list empty or not
+    POST: write from a list the Bill object (username(str), price(int), status(bool)) for each lines of the file
     """
     tmp = ""
     for bill in bill_list:
