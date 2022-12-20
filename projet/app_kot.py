@@ -14,10 +14,6 @@ meal_list = file_interactions.read_file_meal(path_meal)
 bill_list = file_interactions.read_file_bill(path_bill)
 planning_list = planning.init_planning(path_planning)
 
-if len(user_list) > 0:
-    DDay = planning.DDay()
-    planning.get_planning(user_list, planning_list, DDay)
-
 
 def connection():
     """This function allows the user to connect of his page
@@ -38,10 +34,10 @@ def connection():
             if user_connexion != user.username:
                 continue
             flag_found = True
-            if user.is_correct_password(user_connexion_pwd) and ask_user == "1":
+            if user.is_correct_password(user_connexion_pwd) and ask_user == "2":
                 print("cooker connected")
                 cooker_connected(user.username)
-            elif user.is_correct_password(user_connexion_pwd) and ask_user == "2":
+            elif user.is_correct_password(user_connexion_pwd) and ask_user == "1":
                 print("user connected")
                 user_connected(user.username)
             else:
@@ -145,7 +141,7 @@ def user_connected(username):
 
     print("-----Welcome on dining kot manager-----")
     choice_task = input(
-        "Type:\n 1 see the schedule.\n 2 register for the meal of the day.\n 3 unsubscribe to meal of the day."
+        "Type:\n 1 see the schedule.\n 2 register for a meal.\n 3 unsubscribe to a meal."
         "\n 4 see invoice.\n 5 change password.\n 6 Sign out.\n")
     while choice_task != "1" and choice_task != "2" and choice_task != "3" \
             and choice_task != "4" and choice_task != "5" and choice_task != "6":
@@ -154,15 +150,21 @@ def user_connected(username):
             "\n 4 see invoice.\n 5 change password.\n 6 Sign out.\n")
     if choice_task == "1":
         # see the schedule of cooker
-        pass
+        if len(planning_list) > 0:
+            print("------Planning of the Week------")
+            for plan in planning_list:
+                print("Cooker : " + plan.username + " | Date : " + plan.date)
+        else:
+            print("There is no planning for now")
+        user_connected(username)
     elif choice_task == "2":
         # register for a meal
-        meal_date = input("Enter the date of the meal you want to attend")
+        meal_date = input("Enter the date of the meal you want to attend (dd-mm-yyyy)\n")
         if len(meal_list) > 0:
             for meal_in in meal_list:
                 if meal_in.date == meal_date and user_list[index_user].username not in meal_in.participants:
-                    print(f"here is the meal {meal_in.description}")
-                    confirm_meal = input("are you sure to participate, Type 'yes' to confirm or other to quit")
+                    print(f"here is the meal: {meal_in._description}")
+                    confirm_meal = input("are you sure to participate, Type 'yes' to confirm or other to quit\n")
                     if confirm_meal == "yes":
                         if user_list[index_user].username not in meal_in.participants:
                             bill_list[index_bill].price = int(bill_list[index_bill].price) - int(meal_in.price_by_user)
@@ -172,13 +174,14 @@ def user_connected(username):
                                     index_cooker = bill_list.index(bill)
                             bill_list[index_cooker].price = \
                                 int(bill_list[index_cooker].price) + int(meal_in.price_by_user)
-                            user_connected(username)
                         else:
                             print("You are already registered")
                             user_connected(username)
                         meal_in.subscribe(user_list[index_user])
                         file_interactions.write_file_meal(path_meal, meal_list)
                         file_interactions.write_file_bill(path_bill, bill_list)
+                        print("you have been registered")
+                        user_connected(username)
                         user_connected(username)
                     else:
                         user_connected(username)
@@ -189,10 +192,10 @@ def user_connected(username):
             user_connected(username)
 
     elif choice_task == "3":
-        # unsubscribe to meal of the day
+        # unsubscribe to a meal
         if len(meal_list) > 0:
             for meal_in in meal_list:
-                meal_date = input("Enter the date of the meal you want to unsubscribe")
+                meal_date = input("Enter the date of the meal you want to unsubscribe (dd-mm-yyyy)")
                 if meal_in.date == meal_date and user_list[index_user].username not in meal_in.participants:
                     if user_list[index_user].username not in meal_in.participants:
                         bill_list[index_bill].price = int(bill_list[index_bill].price) + int(meal_in.price_by_user)
@@ -266,23 +269,67 @@ def cooker_connected(username):
             "3 see invoice.\n 4 change password.\n 5 Sign out.\n")
     if choice_task == "1":
         # see the schedule of cooker
-        pass
+        if len(planning_list) > 0:
+            print("------Planning of the Week------")
+            for plan in planning_list:
+                print("Cooker : " + plan.username + " | Date : " + plan.date)
+        else:
+            print("There is no planning for now")
+        cooker_connected(username)
     elif choice_task == "2":
         #  Define the meal
-        print("------Meal of the day-----")
+        tmp_planning_list = []
+        print("------Meal-----")
+        if len(planning_list) < 1:
+            define_schedule = input("Are you sure to create a schedule ? Type 'yes' to create a schedule based on users"
+                                    "already created \n")
+            if define_schedule == "yes":
+                d_day = planning.DDay()
+                planning.get_planning(user_list, planning_list, d_day)
+                tmp_planning_list = planning.init_planning(path_planning)
+            else:
+                cooker_connected(username)
+        tmp_user_cooker = []
+        for plan_cook in tmp_planning_list:
+            tmp_user_cooker.append(plan_cook.username)
+        if user_list[index_user].username not in tmp_user_cooker and len(tmp_user_cooker) > 0:
+            print("you are not cooked this week come back another time")
+            introduction()
         meal_description = input("Type the description of the meal\n")
         meal_price = int(input("Type the price of the meal\n"))
-        date_cooker = None
-        for date_planning in planning_list:
-            if len(planning_list) < 1:
+        date_cooker = ""
+        number_meal = 0
+        tmp_planning = planning.init_planning(path_planning)
+        for date_planning in tmp_planning_list:
+            if len(tmp_planning) < 1:
                 print("no definite schedule yet")
             else:
                 if user_list[index_user].username == date_planning.username:
-                    date_cooker = date_planning.date
-        tmp_meal_definition = Meal(meal_description, date_cooker, user_list[index_user].username, meal_price)
-        file_interactions.add_meal_database(tmp_meal_definition, meal_list)
-        file_interactions.write_file_meal(path_meal, meal_list)
-        cooker_connected(username)
+                    number_meal += 1
+        if number_meal > 1:
+            print("you are a cook several times, for what date do you want to define the meal ? Here the planning:")
+            print("------Planning of the Week------")
+            for plan in tmp_planning:
+                print("Cooker : " + plan.username + " | Date : " + plan.date)
+            choice_date_cooker = input("Type the date of the meal to define (dd-mm-yyyy): \n")
+            tmp_user_date = []
+            for plan_by_user in tmp_planning_list:
+                if plan_by_user.username == user_list[index_user].username:
+                    tmp_user_date.append(plan_by_user.date)
+            while choice_date_cooker not in tmp_user_date:
+                choice_date_cooker = input(
+                    "Type the date of the meal to define (dd-mm-yyyy): \n")
+            tmp_meal_definition = Meal(meal_description, choice_date_cooker, user_list[index_user].username, meal_price)
+            file_interactions.add_meal_database(tmp_meal_definition, meal_list)
+            file_interactions.write_file_meal(path_meal, meal_list)
+            cooker_connected(username)
+        else:
+            for date_planning in tmp_planning:
+                date_cooker = date_planning.date
+            tmp_meal_definition = Meal(meal_description, date_cooker, user_list[index_user].username, meal_price)
+            file_interactions.add_meal_database(tmp_meal_definition, meal_list)
+            file_interactions.write_file_meal(path_meal, meal_list)
+            cooker_connected(username)
     elif choice_task == "3":
         # print the bill
         bill_list[index_bill_cooker].get_bill()
