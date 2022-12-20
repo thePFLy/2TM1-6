@@ -4,15 +4,6 @@ import csv
 from datetime import datetime, date, timedelta
 import logging
 
-
-class Planning:
-    """
-        this class represent a day of the planning
-    """
-    def __init__(self, username: str, date):
-        self.username = username
-        self.date = date
-
 def DDay():
     """
         initiate the date stored in DDay.csv
