@@ -5,7 +5,6 @@ from datetime import date
 import file_interactions
 from bill import Bill
 import planning
-from class_plan import Planning
 
 path_user = "database/users.csv"
 path_meal = "database/meal.csv"
@@ -17,7 +16,6 @@ bill_list = file_interactions.read_file_bill(path_bill)
 planning_list = planning.init_planning(path_planning)
 DDay = planning.DDay()
 planning.get_planning(user_list, planning_list, DDay)
-print(planning_list)
 
 
 def connection():
@@ -28,16 +26,21 @@ def connection():
     print("------ login-----")
     user_connexion = input("Type your username\n")
     user_connexion_pwd = getpass("Type your password\n")
+    ask_user = input(
+        "Type:\n 1 log in as user.\n 2 log in as cooker.\n")
+    while ask_user != "1" and ask_user != "2":
+        ask_user = input(
+            "Type:\n 1 log in as user.\n 2 log in as cooker.\n")
     if len(user_list) > 0:
         flag_found = False
         for user in user_list:
             if user_connexion != user.username:
                 continue
             flag_found = True
-            if user.is_correct_password(user_connexion_pwd) and user.cooker:
+            if user.is_correct_password(user_connexion_pwd) and ask_user == "1":
                 print("cooker connected")
                 cooker_connected(user.username)
-            elif user.is_correct_password(user_connexion_pwd):
+            elif user.is_correct_password(user_connexion_pwd) and ask_user == "2":
                 print("user connected")
                 user_connected(user.username)
             else:
@@ -146,13 +149,13 @@ def user_connected(username):
     while choice_task != "1" and choice_task != "2" and choice_task != "3" \
             and choice_task != "4" and choice_task != "5" and choice_task != "6":
         choice_task = input(
-            "Type:\n 1 see the schedule.\n 2 register for the meal of the day.\n 3 unsubscribe to meal of the day."
+            "Type:\n 1 see the schedule.\n 2 register for a meal.\n 3 unsubscribe to meal of the day."
             "\n 4 see invoice.\n 5 change password.\n 6 Sign out.\n")
     if choice_task == "1":
         # see the schedule of cooker
         pass
     elif choice_task == "2":
-        # register for the meal
+        # register for a meal
         if len(meal_list) > 0:
             for meal_in in meal_list:
                 today = date.today()
