@@ -62,10 +62,8 @@ def init_planning():
         with open('database/planning.csv') as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
-                sous_plan = []
-                sous_plan.append(datetime.strptime(row["Day"], "%d-%m-%Y"))
-                sous_plan.append(row["Name"])
-                planning.append(sous_plan)
+                day = Planning(row["Name"],row["Day"])
+                planning.append(day)
         return planning
     except IOError:
         logging.exception('')
@@ -195,3 +193,7 @@ def get_planning(students, planning, dday):
         change_planning(week)
     else:
         pass
+
+listuser = init_planning()
+for i in listuser:
+    print(i.username)
