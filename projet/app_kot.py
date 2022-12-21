@@ -254,8 +254,6 @@ def cooker_connected(username):
             index_bill_cooker = bill_list.index(bill)
 
     file_interactions.add_bill_database(Bill(user_list[index_user].username, "0"), bill_list)
-    for bill in bill_list:
-        print(bill.username)
     file_interactions.write_file_bill(path_bill, bill_list)
 
     print("-----Welcome on dining kot manager-----")
