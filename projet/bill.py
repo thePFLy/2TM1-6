@@ -4,7 +4,7 @@ class Bill:
     this class represent a bill for every member of the co-house
     """
 
-    def __init__(self, username: str, price: int, status=False):
+    def __init__(self, username: str, price: str, status=False):
         """
             this functions allows you to create a bill for every member of the co-house
             PRE: a str date and a boolean status

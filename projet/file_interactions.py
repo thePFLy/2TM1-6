@@ -8,18 +8,23 @@ def read_file_user(path: str):
     PRE:
     :path, a path already created (string)
     POST: returns a list that contains the User objects from the lines of the file as parameter
+    RAISE: print error if the file is not found
     """
     out = []
-    with open(path, mode="r") as csvfile:
-        for line in csvfile.readlines():
-            tmp_line = line.strip().split(",")
-            out.append(Users(tmp_line[0], tmp_line[1], tmp_line[2], tmp_line[3] == "True"))
-    return out
+    try:
+        with open(path, mode="r") as csvfile:
+            for line in csvfile.readlines():
+                tmp_line = line.strip().split(",")
+                out.append(Users(tmp_line[0], tmp_line[1], tmp_line[2], tmp_line[3] == "True"))
+        return out
+    except FileNotFoundError:
+        print('File not found.')
+    except IOError:
+        print('Error IO.')
 
 
 def add_user_database(new_user, users_list):
-    """this function allows you to add User (username hashed_password, my_salt) on database (csv file)
-
+    """this function allows you to add User (username hashed_password, my_salt) on list of Users object
     PRE:
     :new_user, a User object
     :users_list, a list of Users empty or not
@@ -33,7 +38,6 @@ def add_user_database(new_user, users_list):
 
 def delete_user_database(old_user, users_list):
     """this function allows you to delete User from a list
-
     PRE:
     :old_user, an old User object (already in list)
     :users_list, a list empty or not
@@ -51,11 +55,14 @@ def write_file_user(path, users_list):
     :users_list, User list empty or not
     POST: write from a list the Users object (username hashed_password, my_salt) for each lines of the file
     """
-    tmp = ""
-    for user in users_list:
-        tmp += str(user) + "\n"
-    with open(path, mode="w") as csvfile:
-        csvfile.write(tmp)
+    try:
+        tmp = ""
+        for user in users_list:
+            tmp += str(user) + "\n"
+        with open(path, mode="w") as csvfile:
+            csvfile.write(tmp)
+    except OSError as e:
+        print(type(e), e)
 
 
 def stitch_list(lst):
@@ -98,18 +105,24 @@ def read_file_meal(path: str):
     PRE:
     :path, a path already created (string)
     POST: returns a list that contains the Meal objects from the lines of the file as parameter
+    RAISE: print error if the file is not found
     """
     out = []
-    with open(path, mode="r") as csvfile:
-        for line in csvfile.readlines():
-            tmp_line = stitch_list(line.strip().split(","))
-            out.append(Meal(tmp_line[0], tmp_line[1], tmp_line[2], tmp_line[3], tmp_line[4]))
-    return out
+    try:
+        with open(path, mode="r") as csvfile:
+            for line in csvfile.readlines():
+                tmp_line = stitch_list(line.strip().split(","))
+                out.append(Meal(tmp_line[0], tmp_line[1], tmp_line[2], tmp_line[3], tmp_line[4]))
+        return out
+    except FileNotFoundError:
+        print('File not found.')
+    except IOError:
+        print('Error IO.')
 
 
 def add_meal_database(new_meal, meal_list):
     """this function allows you to add Meal (description(str), date(date), cooker(str), price_by_user (int),
-    participants (tab)) on database (csv file)
+    participants (tab)) on Meal list
     PRE:
     :new_meal, a Meal object
     :meal_list, a list of Meal empty or not
@@ -130,11 +143,14 @@ def write_file_meal(path, meal_list):
     POST: write from a list the Meal object (description(str), date(date), cooker(str), price_by_user (int),
     participants (tab)) for each lines of the file
     """
-    tmp = ""
-    for meal in meal_list:
-        tmp += str(meal) + "\n"
-    with open(path, mode="w") as csvfile:
-        csvfile.write(tmp)
+    try:
+        tmp = ""
+        for meal in meal_list:
+            tmp += str(meal) + "\n"
+        with open(path, mode="w") as csvfile:
+            csvfile.write(tmp)
+    except OSError as e:
+        print(type(e), e)
 
 
 def read_file_bill(path: str):
@@ -144,11 +160,16 @@ def read_file_bill(path: str):
     POST: returns a list that contains the Bill objects from the lines of the file as parameter
     """
     out = []
-    with open(path, mode="r") as csvfile:
-        for line in csvfile.readlines():
-            tmp_line = line.strip().split(",")
-            out.append(Bill(tmp_line[0], tmp_line[1], tmp_line[2]))
-    return out
+    try:
+        with open(path, mode="r") as csvfile:
+            for line in csvfile.readlines():
+                tmp_line = line.strip().split(",")
+                out.append(Bill(tmp_line[0], tmp_line[1], tmp_line[2]))
+        return out
+    except FileNotFoundError:
+        print('File not found.')
+    except IOError:
+        print('Error IO.')
 
 
 def add_bill_database(new_bill, bill_list):
@@ -172,8 +193,11 @@ def write_file_bill(path, bill_list):
     :bill_list, Bill list empty or not
     POST: write from a list the Bill object (username(str), price(int), status(bool)) for each lines of the file
     """
-    tmp = ""
-    for bill in bill_list:
-        tmp += str(bill) + "\n"
-    with open(path, mode="w") as csvfile:
-        csvfile.write(tmp)
+    try:
+        tmp = ""
+        for bill in bill_list:
+            tmp += str(bill) + "\n"
+        with open(path, mode="w") as csvfile:
+            csvfile.write(tmp)
+    except OSError as e:
+        print(type(e), e)
