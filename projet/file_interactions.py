@@ -2,25 +2,30 @@ from user import Users
 from meal import Meal
 from bill import Bill
 
+class FileNotFoundError(Exception):
+    pass
+
+class OSError(Exception):
+    pass
+
 
 def read_file_user(path: str):
     """this function allows you to read a file and append each line as user
     PRE:
-    :path, a path already created (string)
+    :path, a path already created (string) within Users object as line (username, hashed password, a salt)
     POST: returns a list that contains the User objects from the lines of the file as parameter
     RAISE: print error if the file is not found
     """
-    out = []
     try:
+        out = []
         with open(path, mode="r") as csvfile:
             for line in csvfile.readlines():
                 tmp_line = line.strip().split(",")
                 out.append(Users(tmp_line[0], tmp_line[1], tmp_line[2], tmp_line[3] == "True"))
         return out
     except FileNotFoundError:
-        print('File not found.')
-    except IOError:
-        print('Error IO.')
+        raise FileNotFoundError("File not found")
+
 
 
 def add_user_database(new_user, users_list):
@@ -45,7 +50,7 @@ def delete_user_database(old_user, users_list):
     """
     for user in users_list:
         if user.username == old_user.username:
-            del user
+            users_list.remove(user)
 
 
 def write_file_user(path, users_list):
@@ -54,6 +59,7 @@ def write_file_user(path, users_list):
     :path, a path already created of file
     :users_list, User list empty or not
     POST: write from a list the Users object (username hashed_password, my_salt) for each lines of the file
+    RAISE: error if the file is not found
     """
     try:
         tmp = ""
@@ -63,6 +69,7 @@ def write_file_user(path, users_list):
             csvfile.write(tmp)
     except OSError as e:
         print(type(e), e)
+        raise OSError
 
 
 def stitch_list(lst):
@@ -98,6 +105,7 @@ def stitch_list(lst):
         if not flg:
             out.append(i)
     return out
+
 
 
 def read_file_meal(path: str):
@@ -151,6 +159,7 @@ def write_file_meal(path, meal_list):
             csvfile.write(tmp)
     except OSError as e:
         print(type(e), e)
+        raise OSError
 
 
 def read_file_bill(path: str):

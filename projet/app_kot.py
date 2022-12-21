@@ -131,7 +131,7 @@ def user_connected(username):
         if username == user.username:
             index_user = user_list.index(user)
 
-    file_interactions.add_bill_database(Bill(username, 0), bill_list)
+    file_interactions.add_bill_database(Bill(username, "0"), bill_list)
     file_interactions.write_file_bill(path_bill, bill_list)
 
     index_bill = 0
@@ -253,7 +253,7 @@ def cooker_connected(username):
         if username == bill.username:
             index_bill_cooker = bill_list.index(bill)
 
-    file_interactions.add_bill_database(Bill(user_list[index_user].username, 0), bill_list)
+    file_interactions.add_bill_database(Bill(user_list[index_user].username, "0"), bill_list)
     for bill in bill_list:
         print(bill.username)
     file_interactions.write_file_bill(path_bill, bill_list)
