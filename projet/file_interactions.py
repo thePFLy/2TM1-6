@@ -2,7 +2,7 @@ from user import Users
 from meal import Meal
 from bill import Bill
 
-class FileNotFoundError(Exception):
+class FileNotFoundErrorException(Exception):
     pass
 
 class OSError(Exception):
@@ -23,7 +23,7 @@ def read_file_user(path: str):
                 tmp_line = line.strip().split(",")
                 out.append(Users(tmp_line[0], tmp_line[1], tmp_line[2], tmp_line[3] == "True"))
         return out
-    except FileNotFoundError:
+    except:
         raise FileNotFoundError("File not found")
 
 
