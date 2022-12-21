@@ -23,6 +23,10 @@ class Meal:
     def __str__(self):
         return f'{self._description},{self.date},{self.cooker},{self.price_by_user},{self.participants}'
 
+    @property
+    def description(self):
+        return self._description
+
     def get_description(self):
         """
         this function is aimed to return a textual description of the meal

@@ -30,6 +30,8 @@ class Bill:
             print(f"you have {abs(int(self.price))} euros left to pay")
         if int(self.price) > 0:
             print(f"other users owe you {abs(int(self.price))} euro")
+        if int(self.price) == 0:
+            print(f"You have already paid our bill")
 
     def payBill(self):
         """

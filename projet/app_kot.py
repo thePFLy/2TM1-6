@@ -163,7 +163,7 @@ def user_connected(username):
         if len(meal_list) > 0:
             for meal_in in meal_list:
                 if meal_in.date == meal_date and user_list[index_user].username not in meal_in.participants:
-                    print(f"here is the meal: {meal_in._description}")
+                    print(f"here is the meal: {meal_in.description}")
                     confirm_meal = input("are you sure to participate, Type 'yes' to confirm or other to quit\n")
                     if confirm_meal == "yes":
                         if user_list[index_user].username not in meal_in.participants:
