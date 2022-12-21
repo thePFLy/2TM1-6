@@ -41,6 +41,16 @@ class TestMeal(TestCase):
         self.assertEqual(len(result1), 2)
         self.assertEqual(self.obj1.participants[0].username, "toto", "Le seul participant devrait être ronald")
 
+    def test_get_participants(self):
+        result1 = self.obj1.get_participants()
+        result2 = self.obj2.get_participants()
+        self.assertEqual(len(result1), 2)
+        self.assertEqual(self.obj1.participants[0].username, "ronald", "Le seul participant devrait être ronald")
+        self.assertEqual(self.obj1.participants[1].username, "toto", "Le seul participant devrait être toto")
+        self.assertEqual(len(result2), 0)
+
+
+
 
 
 
