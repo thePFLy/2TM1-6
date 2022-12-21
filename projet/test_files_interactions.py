@@ -6,7 +6,7 @@ from file_interactions import read_file_user, add_user_database, delete_user_dat
 import unittest
 
 
-class TestReadFileUser(unittest.TestCase):
+class TestReadFile(unittest.TestCase):
     def test_read_file_user(self):
         # Test that the function reads a file correctly and returns a list of User objects
         path = "unittest/test_readfile_user.csv"

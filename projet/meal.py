@@ -1,7 +1,8 @@
 
 class Meal:
     """ class meal """
-    def __init__(self, description, date, cooker, price_by_user: int):
+
+    def __init__(self, description, date, cooker, price_by_user: int, participants=None):
         """"
         this function allows you to create a meal object
         PRE: a str Description, Date, cooker who is the responsible for the meal and the list of participants
@@ -12,10 +13,11 @@ class Meal:
         :participants, list of participants
         POST: create a meal object
         """
-
+        if participants is None:
+            participants = []
         self._description = description
         self.date = date
-        self.participants = []
+        self.participants = participants
         self.cooker = cooker
         self.price_by_user = price_by_user
 
@@ -54,9 +56,7 @@ class Meal:
         :user, a User object
         POST: add a new username in the list of participants
         """
-
-        self.participants.append(user)
-        return self.participants
+        self.participants.append(user.username)
 
     def unsubscribe(self, user):
         """
@@ -65,13 +65,7 @@ class Meal:
         :user, a User object
         POST: remove a person from list of participants
         """
-        self.participants.remove(user)
-        return self.participants
-
-
-
-
-
+        self.participants.remove(user.username)
 
     def change_cooker(self, user):
         """
