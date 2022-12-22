@@ -17,7 +17,7 @@ class TestBill(unittest.TestCase):
 
         # check that the username, price, and status are set correctly
         self.assertEqual(bill.username, "user1")
-        self.assertEqual(bill.price, 100)
+        self.assertEqual(bill.price, "100")
         self.assertEqual(bill.status, True)
 
     def test_str(self):
@@ -399,7 +399,7 @@ class TestUsers(unittest.TestCase):
         # Test the change_cooker property
         user = Users('test_user', hashed_password=b'hashed_password', my_salt=b'salt', cooker=True)
         self.assertTrue(user.cooker)
-        user.change_cooker()
+        user.change_cooker
         self.assertFalse(user.cooker)
 
     def setUp(self):
